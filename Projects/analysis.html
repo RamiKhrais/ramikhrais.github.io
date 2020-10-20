@@ -1,0 +1,729 @@
+<div id="data-overview" class="section level2">
+    <h2>Data Overview</h2>
+    <p style="text-align: justify;">
+    The data that will be used in this analysis is extracted from built-in R dataset <strong>hflights</strong>. The dataset consists of 21 variables and 227,496 observations and it covers the activity of 15 carriers in United States in 2011.
+    </p>
+    </div>
+    <div id="what-is-next" class="section level2">
+    <h2>What is next?</h2>
+    <p style="text-align: justify;">
+    What I’m going to do is to imagine myself as an analyst who works in a market research consultancy. I have been requested by my manager to extract some useful insights from the dataset. I have also been asked to visualize the resulted insights in a nice and precise way so the manager can draw few conclusions about the main trends in the market.
+    </p>
+    </div>
+    <div id="packages-used-in-the-analysis" class="section level2">
+    <h2>Packages used in the analysis</h2>
+    <pre class="r"><code>library(hflights) 
+    library(ggplot2) 
+    library(dplyr)
+    library(ggthemes)
+    library(scales)
+    library(gridExtra)</code></pre>
+    <p style="text-align: justify;">
+    Let’s first have a look at our dataset.
+    </p>
+    <pre class="r"><code>glimpse(hflights)</code></pre>
+    <pre><code>## Observations: 227,496
+    ## Variables: 21
+    ## $ Year              &lt;int&gt; 2011, 2011, 2011, 2011, 2011, 2011, 2011, 20...
+    ## $ Month             &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+    ## $ DayofMonth        &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 1...
+    ## $ DayOfWeek         &lt;int&gt; 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6,...
+    ## $ DepTime           &lt;int&gt; 1400, 1401, 1352, 1403, 1405, 1359, 1359, 13...
+    ## $ ArrTime           &lt;int&gt; 1500, 1501, 1502, 1513, 1507, 1503, 1509, 14...
+    ## $ UniqueCarrier     &lt;chr&gt; &quot;AA&quot;, &quot;AA&quot;, &quot;AA&quot;, &quot;AA&quot;, &quot;AA&quot;, &quot;AA&quot;, &quot;AA&quot;, &quot;A...
+    ## $ FlightNum         &lt;int&gt; 428, 428, 428, 428, 428, 428, 428, 428, 428,...
+    ## $ TailNum           &lt;chr&gt; &quot;N576AA&quot;, &quot;N557AA&quot;, &quot;N541AA&quot;, &quot;N403AA&quot;, &quot;N49...
+    ## $ ActualElapsedTime &lt;int&gt; 60, 60, 70, 70, 62, 64, 70, 59, 71, 70, 70, ...
+    ## $ AirTime           &lt;int&gt; 40, 45, 48, 39, 44, 45, 43, 40, 41, 45, 42, ...
+    ## $ ArrDelay          &lt;int&gt; -10, -9, -8, 3, -3, -7, -1, -16, 44, 43, 29,...
+    ## $ DepDelay          &lt;int&gt; 0, 1, -8, 3, 5, -1, -1, -5, 43, 43, 29, 19, ...
+    ## $ Origin            &lt;chr&gt; &quot;IAH&quot;, &quot;IAH&quot;, &quot;IAH&quot;, &quot;IAH&quot;, &quot;IAH&quot;, &quot;IAH&quot;, &quot;I...
+    ## $ Dest              &lt;chr&gt; &quot;DFW&quot;, &quot;DFW&quot;, &quot;DFW&quot;, &quot;DFW&quot;, &quot;DFW&quot;, &quot;DFW&quot;, &quot;D...
+    ## $ Distance          &lt;int&gt; 224, 224, 224, 224, 224, 224, 224, 224, 224,...
+    ## $ TaxiIn            &lt;int&gt; 7, 6, 5, 9, 9, 6, 12, 7, 8, 6, 8, 4, 6, 5, 6...
+    ## $ TaxiOut           &lt;int&gt; 13, 9, 17, 22, 9, 13, 15, 12, 22, 19, 20, 11...
+    ## $ Cancelled         &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+    ## $ CancellationCode  &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, ...
+    ## $ Diverted          &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...</code></pre>
+    <p style="text-align: justify;">
+    It seems that the carriers have been regestired by their codes instead of their names. It might be more convenient to assign the full name for each carrier.
+    </p>
+    <pre class="r"><code>lut &lt;- c(&quot;AA&quot; = &quot;American&quot;, &quot;AS&quot; = &quot;Alaska&quot;, &quot;B6&quot; = &quot;JetBlue&quot;, &quot;CO&quot; = &quot;Continental&quot;, 
+             &quot;DL&quot; = &quot;Delta&quot;, &quot;OO&quot; = &quot;SkyWest&quot;, &quot;UA&quot; = &quot;United&quot;, &quot;US&quot; = &quot;US_Airways&quot;, 
+             &quot;WN&quot; = &quot;Southwest&quot;, &quot;EV&quot; = &quot;Atlantic_Southeast&quot;, &quot;F9&quot; = &quot;Frontier&quot;, 
+             &quot;FL&quot; = &quot;AirTran&quot;, &quot;MQ&quot; = &quot;American_Eagle&quot;, &quot;XE&quot; = &quot;ExpressJet&quot;, &quot;YV&quot; = &quot;Mesa&quot;)
+    
+    
+    hflights$Carrier &lt;- lut[hflights$UniqueCarrier]
+    
+    glimpse(hflights)</code></pre>
+    <pre><code>## Observations: 227,496
+    ## Variables: 22
+    ## $ Year              &lt;int&gt; 2011, 2011, 2011, 2011, 2011, 2011, 2011, 20...
+    ## $ Month             &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+    ## $ DayofMonth        &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 1...
+    ## $ DayOfWeek         &lt;int&gt; 6, 7, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6,...
+    ## $ DepTime           &lt;int&gt; 1400, 1401, 1352, 1403, 1405, 1359, 1359, 13...
+    ## $ ArrTime           &lt;int&gt; 1500, 1501, 1502, 1513, 1507, 1503, 1509, 14...
+    ## $ UniqueCarrier     &lt;chr&gt; &quot;AA&quot;, &quot;AA&quot;, &quot;AA&quot;, &quot;AA&quot;, &quot;AA&quot;, &quot;AA&quot;, &quot;AA&quot;, &quot;A...
+    ## $ FlightNum         &lt;int&gt; 428, 428, 428, 428, 428, 428, 428, 428, 428,...
+    ## $ TailNum           &lt;chr&gt; &quot;N576AA&quot;, &quot;N557AA&quot;, &quot;N541AA&quot;, &quot;N403AA&quot;, &quot;N49...
+    ## $ ActualElapsedTime &lt;int&gt; 60, 60, 70, 70, 62, 64, 70, 59, 71, 70, 70, ...
+    ## $ AirTime           &lt;int&gt; 40, 45, 48, 39, 44, 45, 43, 40, 41, 45, 42, ...
+    ## $ ArrDelay          &lt;int&gt; -10, -9, -8, 3, -3, -7, -1, -16, 44, 43, 29,...
+    ## $ DepDelay          &lt;int&gt; 0, 1, -8, 3, 5, -1, -1, -5, 43, 43, 29, 19, ...
+    ## $ Origin            &lt;chr&gt; &quot;IAH&quot;, &quot;IAH&quot;, &quot;IAH&quot;, &quot;IAH&quot;, &quot;IAH&quot;, &quot;IAH&quot;, &quot;I...
+    ## $ Dest              &lt;chr&gt; &quot;DFW&quot;, &quot;DFW&quot;, &quot;DFW&quot;, &quot;DFW&quot;, &quot;DFW&quot;, &quot;DFW&quot;, &quot;D...
+    ## $ Distance          &lt;int&gt; 224, 224, 224, 224, 224, 224, 224, 224, 224,...
+    ## $ TaxiIn            &lt;int&gt; 7, 6, 5, 9, 9, 6, 12, 7, 8, 6, 8, 4, 6, 5, 6...
+    ## $ TaxiOut           &lt;int&gt; 13, 9, 17, 22, 9, 13, 15, 12, 22, 19, 20, 11...
+    ## $ Cancelled         &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+    ## $ CancellationCode  &lt;chr&gt; &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;, ...
+    ## $ Diverted          &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+    ## $ Carrier           &lt;chr&gt; &quot;American&quot;, &quot;American&quot;, &quot;American&quot;, &quot;America...</code></pre>
+    <p style="text-align: justify;">
+    Not that much of data manipulation as the dataset is staraightforward. Let’s start analysing our data by asking: <span style="color:#2A3132"><strong>Which carriers dominate the market?</strong></span>
+    </p>
+    <pre class="r"><code>market_snapshot &lt;- hflights %&gt;%
+      filter(Cancelled == 0) %&gt;%
+      group_by(Carrier) %&gt;%
+      summarise(flights = n()) %&gt;%
+      arrange(desc(flights))
+    
+    market_snapshot</code></pre>
+    <pre><code>## # A tibble: 15 x 2
+    ##    Carrier            flights
+    ##    &lt;chr&gt;                &lt;int&gt;
+    ##  1 ExpressJet           71921
+    ##  2 Continental          69557
+    ##  3 Southwest            44640
+    ##  4 SkyWest              15837
+    ##  5 American_Eagle        4513
+    ##  6 US_Airways            4036
+    ##  7 American              3184
+    ##  8 Delta                 2599
+    ##  9 Atlantic_Southeast    2128
+    ## 10 AirTran               2118
+    ## 11 United                2038
+    ## 12 Frontier               832
+    ## 13 JetBlue                677
+    ## 14 Alaska                 365
+    ## 15 Mesa                    78</code></pre>
+    <pre class="r"><code>highest &lt;- c(&quot;two&quot;, rep(&quot;one&quot;, 14))
+    
+    ggplot(market_snapshot, aes(x = reorder(Carrier, flights), y = flights)) + 
+      geom_bar(stat = &quot;identity&quot;, aes(fill = highest)) + 
+      scale_fill_manual(values = c(&quot;#F98866&quot;,&quot;#FF420E&quot;)) + coord_flip() +
+      geom_text(aes(y= flights, x = seq(15,1), label = paste0(round(flights),&quot;&quot;)), nudge_y = 4700, color=&quot;black&quot;, size = 5) + 
+      theme_minimal() +
+      theme(axis.title.x = element_blank(),
+            axis.title.y = element_blank(),
+            axis.text.x = element_blank(),
+            axis.text.y = element_text(size = 11, colour = &quot;black&quot;, face = &quot;bold&quot;),
+            legend.position = &quot;None&quot;,
+            panel.background = element_blank(),
+            panel.grid = element_blank(),
+            plot.title = element_text(size = 16, margin = margin(0,0,20,0))) + 
+      labs(title = &quot;The Most Active Carriers in 2011&quot;, 
+           caption = &quot;Source: hflights&quot;)</code></pre>
+    <p><img src="/post/2018-11-16-analysis-of-airlines-market-in-usa_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+    <p style="text-align: justify;">
+    It seems that <strong>ExpressJet</strong> along with <strong>Continental</strong> have the lion’s share of the number of flights. We can go much deeper now and examine the performance of both carriers within different time ranges.
+    </p>
+    <p style="text-align: justify;">
+    <span style="color:#2A3132"><strong>How do ExpressJet and Continental perform daily within one week?</strong>
+    </p>
+    <p></span></p>
+    <pre class="r"><code>two_largest_daily &lt;- hflights %&gt;%
+      filter(DayOfWeek %in% c(1, 2, 3, 4, 5, 6, 7)) %&gt;%
+      filter(Cancelled == 0) %&gt;%
+      filter(Carrier %in% c(&quot;Continental&quot;, &quot;ExpressJet&quot;)) %&gt;%
+      group_by(Carrier, DayOfWeek) %&gt;%
+      summarise(flights = n())
+    
+    two_largest_daily</code></pre>
+    <pre><code>## # A tibble: 14 x 3
+    ## # Groups:   Carrier [?]
+    ##    Carrier     DayOfWeek flights
+    ##    &lt;chr&gt;           &lt;int&gt;   &lt;int&gt;
+    ##  1 Continental         1   10453
+    ##  2 Continental         2    9418
+    ##  3 Continental         3    9497
+    ##  4 Continental         4   10522
+    ##  5 Continental         5   10509
+    ##  6 Continental         6    9061
+    ##  7 Continental         7   10097
+    ##  8 ExpressJet          1   11154
+    ##  9 ExpressJet          2    9670
+    ## 10 ExpressJet          3    9785
+    ## 11 ExpressJet          4   11203
+    ## 12 ExpressJet          5   11231
+    ## 13 ExpressJet          6    8502
+    ## 14 ExpressJet          7   10376</code></pre>
+    <pre class="r"><code>ggplot(two_largest_daily, aes(x= DayOfWeek, y= flights, col = Carrier)) + 
+        geom_line(size = 1.2) +
+        theme_minimal() +
+        geom_point(size = 3.2, shape = 21, fill = &quot;white&quot;, stroke = 2.5) + 
+        scale_colour_manual(values = c(&quot;firebrick1&quot;, &quot;goldenrod1&quot;)) +
+        scale_x_continuous(breaks = 1:7, labels = c(&quot;Monday&quot;, &quot;Tuesday&quot;, &quot;Wednesday&quot;, &quot;Thursday&quot;, &quot;Friday&quot;, &quot;Saturday&quot;, &quot;Sunday&quot;)) + 
+        theme(axis.text.x = element_text(colour = &quot;black&quot;, size = 12, vjust = 0.6, angle = 60)) +
+        theme(axis.text.y = element_text(colour = &quot;black&quot;, size = 12)) + 
+        theme(axis.title.x = element_blank()) +
+        ylab(&quot;Number of Flights&quot;) +
+        theme(axis.title.y = element_text(size = 14, margin = margin(r = 20))) +
+        theme(panel.grid.major.x = element_blank()) + 
+        theme(panel.grid.minor.x = element_blank()) +
+        theme(legend.position = &quot;bottom&quot;) + 
+        theme(legend.title = element_blank()) + 
+        theme(legend.text = element_text(size = 12, colour = &quot;black&quot;, face = &quot;bold&quot;)) +
+        labs(title = &quot;The Two Largest Players in the Market&quot;, subtitle = &quot;Daily Flights in a Week&quot;) + 
+        theme(plot.title = element_text(size = 15))</code></pre>
+    <p><img src="/post/2018-11-16-analysis-of-airlines-market-in-usa_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+    <p style="text-align: justify;">
+    <span style="color:#2A3132"><strong>How do ExpressJet and Continental perform daily within one month?</strong>
+    </p>
+    <p></span></p>
+    <pre class="r"><code>two_largest_daily_month &lt;- hflights %&gt;%
+      filter(DayofMonth %in% c(1:30)) %&gt;%
+      filter(Cancelled == 0) %&gt;%
+      filter(Carrier %in% c(&quot;ExpressJet&quot;, &quot;Continental&quot;)) %&gt;%
+      group_by(Carrier, DayofMonth) %&gt;%
+      summarise(flights = n())
+    
+    
+    two_largest_daily_month &lt;- as.data.frame(two_largest_daily_month)
+    two_largest_daily_month</code></pre>
+    <pre><code>##        Carrier DayofMonth flights
+    ## 1  Continental          1    2249
+    ## 2  Continental          2    2289
+    ## 3  Continental          3    2254
+    ## 4  Continental          4    2130
+    ## 5  Continental          5    2268
+    ## 6  Continental          6    2334
+    ## 7  Continental          7    2329
+    ## 8  Continental          8    2284
+    ## 9  Continental          9    2287
+    ## 10 Continental         10    2347
+    ## 11 Continental         11    2299
+    ## 12 Continental         12    2257
+    ## 13 Continental         13    2313
+    ## 14 Continental         14    2346
+    ## 15 Continental         15    2299
+    ## 16 Continental         16    2280
+    ## 17 Continental         17    2332
+    ## 18 Continental         18    2312
+    ## 19 Continental         19    2222
+    ## 20 Continental         20    2309
+    ## 21 Continental         21    2339
+    ## 22 Continental         22    2324
+    ## 23 Continental         23    2303
+    ## 24 Continental         24    2249
+    ## 25 Continental         25    2276
+    ## 26 Continental         26    2248
+    ## 27 Continental         27    2307
+    ## 28 Continental         28    2322
+    ## 29 Continental         29    2063
+    ## 30 Continental         30    2071
+    ## 31  ExpressJet          1    2332
+    ## 32  ExpressJet          2    2422
+    ## 33  ExpressJet          3    2273
+    ## 34  ExpressJet          4    2154
+    ## 35  ExpressJet          5    2263
+    ## 36  ExpressJet          6    2447
+    ## 37  ExpressJet          7    2462
+    ## 38  ExpressJet          8    2305
+    ## 39  ExpressJet          9    2305
+    ## 40  ExpressJet         10    2424
+    ## 41  ExpressJet         11    2440
+    ## 42  ExpressJet         12    2248
+    ## 43  ExpressJet         13    2422
+    ## 44  ExpressJet         14    2491
+    ## 45  ExpressJet         15    2345
+    ## 46  ExpressJet         16    2336
+    ## 47  ExpressJet         17    2393
+    ## 48  ExpressJet         18    2429
+    ## 49  ExpressJet         19    2304
+    ## 50  ExpressJet         20    2465
+    ## 51  ExpressJet         21    2466
+    ## 52  ExpressJet         22    2339
+    ## 53  ExpressJet         23    2357
+    ## 54  ExpressJet         24    2304
+    ## 55  ExpressJet         25    2331
+    ## 56  ExpressJet         26    2352
+    ## 57  ExpressJet         27    2499
+    ## 58  ExpressJet         28    2530
+    ## 59  ExpressJet         29    2033
+    ## 60  ExpressJet         30    2094</code></pre>
+    <pre class="r"><code>ggplot(two_largest_daily_month, aes(x= DayofMonth, y= flights, col= Carrier)) +
+      geom_line(size = 1.2) +
+      geom_point(size = 3.2, shape = 21, fill = &quot;white&quot;, stroke = 2.5) +
+      theme_minimal() + 
+      scale_colour_manual(values = c(&quot;firebrick1&quot;, &quot;goldenrod1&quot;)) + 
+      scale_x_continuous(breaks = 1:30, limits = c(0, 30)) + 
+      scale_y_continuous(limits = c(2000, 2600), breaks = c(2000, 2100, 2200, 2300, 2400, 2500, 2600), labels = scales :: comma) +
+      ylab(&quot;Number of Flights&quot;) +
+      theme(panel.grid.major.x = element_blank()) + 
+      theme(panel.grid.minor.x = element_blank()) +
+      theme(axis.text.x = element_text(size = 10, colour = &quot;black&quot;)) +
+      theme(axis.text.y = element_text(size = 10, colour = &quot;black&quot;)) +
+      theme(axis.title.x = element_blank()) +
+      theme(axis.title.y = element_text(size= 14, margin = margin(r =20))) + 
+      theme(legend.position = &quot;bottom&quot;) + 
+      theme(legend.title = element_blank()) + 
+      theme(legend.text = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;)) +
+      labs(title = &quot;The Two Largest Players in the Market&quot;, subtitle = &quot;Daily Flights in a Month&quot;) + 
+      theme(plot.title = element_text(size = 15))</code></pre>
+    <p><img src="/post/2018-11-16-analysis-of-airlines-market-in-usa_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+    <p style="text-align: justify;">
+    <span style="color:#2A3132"><strong>How do ExpressJet and Continental perform monthly?</strong>
+    </p>
+    <p></span></p>
+    <pre class="r"><code>two_largest_monthly &lt;- hflights %&gt;%
+      filter(Month %in% c(1:12)) %&gt;%
+      filter(Cancelled == 0) %&gt;%
+      filter(Carrier %in% c(&quot;ExpressJet&quot;, &quot;Continental&quot;)) %&gt;%
+      group_by(Carrier, Month) %&gt;%
+      summarise(flights = n())
+        
+        
+    two_largest_monthly &lt;- as.data.frame(two_largest_monthly)
+    two_largest_monthly</code></pre>
+    <pre><code>##        Carrier Month flights
+    ## 1  Continental     1    6010
+    ## 2  Continental     2    5181
+    ## 3  Continental     3    6024
+    ## 4  Continental     4    5513
+    ## 5  Continental     5    5824
+    ## 6  Continental     6    6025
+    ## 7  Continental     7    6174
+    ## 8  Continental     8    5962
+    ## 9  Continental     9    5451
+    ## 10 Continental    10    5901
+    ## 11 Continental    11    5691
+    ## 12 Continental    12    5801
+    ## 13  ExpressJet     1    6727
+    ## 14  ExpressJet     2    5348
+    ## 15  ExpressJet     3    6321
+    ## 16  ExpressJet     4    5976
+    ## 17  ExpressJet     5    5985
+    ## 18  ExpressJet     6    6045
+    ## 19  ExpressJet     7    6728
+    ## 20  ExpressJet     8    6606
+    ## 21  ExpressJet     9    5590
+    ## 22  ExpressJet    10    5514
+    ## 23  ExpressJet    11    5309
+    ## 24  ExpressJet    12    5772</code></pre>
+    <pre class="r"><code>ggplot(two_largest_monthly, aes(x= Month, y= flights, col = Carrier)) +
+      geom_line(size = 1.2) +
+      geom_point(size = 3.2, shape = 21, fill = &quot;white&quot;, stroke = 2.5) +
+      theme_minimal() +
+      ylab(&quot;Number of Flights&quot;) +
+      scale_y_continuous(breaks = seq(5000, 7000, 300)) +
+      scale_x_continuous(breaks = 1:12, labels = c(&quot;Jan&quot;, &quot;Feb&quot;, &quot;Mar&quot;, &quot;Apr&quot;, &quot;May&quot;, &quot;Jun&quot;, &quot;Jul&quot;, &quot;Aug&quot;, &quot;Sep&quot;, &quot;Oct&quot;, &quot;Nov&quot;, &quot;Dec&quot;)) +
+      theme(axis.text.x = element_text(size = 12, colour = &quot;black&quot;)) +
+      theme(axis.text.y = element_text(size = 12, colour = &quot;black&quot;)) +
+      theme(axis.title.x = element_blank()) +
+      theme(panel.grid.major.x = element_blank()) +
+      theme(panel.grid.minor.x = element_blank()) + 
+      scale_colour_manual(values = c(&quot;firebrick1&quot;, &quot;goldenrod1&quot;)) +
+      theme(axis.title.y = element_text(size = 14, margin = margin(r=20))) +
+      theme(legend.position = &quot;bottom&quot;) +
+      theme(legend.text = element_text(size= 12, face = &quot;bold&quot;, colour= &quot;black&quot;)) + 
+      theme(legend.title = element_blank()) +
+      labs(title = &quot;The Largest Players in the Market&quot;, subtitle = &quot;Monthly Flights&quot;) +
+      theme(plot.title = element_text(size = 15, colour = &quot;black&quot;))</code></pre>
+    <p><img src="/post/2018-11-16-analysis-of-airlines-market-in-usa_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+    </div>
+    <div id="more-insights-ahead" class="section level2">
+    <h2>More Insights Ahead!</h2>
+    <p style="text-align: justify;">
+    Everthing looks good so far. Let’s try now to get some spatial insights by aaking: <strong>What is the most active departure airport for each carrier in the weekend?</strong>
+    </p>
+    <pre class="r"><code>Origin_carr &lt;- hflights %&gt;%
+      filter(DayOfWeek %in% c(6, 7)) %&gt;%
+      group_by(Carrier, Origin) %&gt;%
+      summarise(flights = n()) %&gt;%
+      mutate(rank = rank(desc(flights))) %&gt;%
+      filter(rank == 1) %&gt;%
+      arrange(desc(flights))
+    
+    Origin_carr</code></pre>
+    <pre><code>## # A tibble: 15 x 4
+    ## # Groups:   Carrier [15]
+    ##    Carrier            Origin flights  rank
+    ##    &lt;chr&gt;              &lt;chr&gt;    &lt;int&gt; &lt;dbl&gt;
+    ##  1 Continental        IAH      19250     1
+    ##  2 ExpressJet         IAH      19136     1
+    ##  3 Southwest          HOU      10792     1
+    ##  4 SkyWest            IAH       4380     1
+    ##  5 US_Airways         IAH       1119     1
+    ##  6 American           IAH        896     1
+    ##  7 American_Eagle     IAH        605     1
+    ##  8 Delta              IAH        596     1
+    ##  9 United             IAH        589     1
+    ## 10 AirTran            HOU        527     1
+    ## 11 Atlantic_Southeast IAH        437     1
+    ## 12 Frontier           HOU        203     1
+    ## 13 JetBlue            HOU        188     1
+    ## 14 Alaska             IAH        105     1
+    ## 15 Mesa               IAH         39     1</code></pre>
+    <p style="text-align: justify;">
+    <strong>What is the most visited destination for each carrier in the weekend?</strong>
+    </p>
+    <pre class="r"><code>Dest_carr &lt;- hflights %&gt;% 
+      filter(DayOfWeek %in% c(6, 7)) %&gt;%
+      group_by(Carrier, Dest) %&gt;%
+      summarise(flights = n()) %&gt;%
+      mutate(rank = rank(desc(flights))) %&gt;%
+      filter(rank == 1) %&gt;%
+      arrange(desc(flights))
+    
+    Dest_carr</code></pre>
+    <pre><code>## # A tibble: 15 x 4
+    ## # Groups:   Carrier [15]
+    ##    Carrier            Dest  flights  rank
+    ##    &lt;chr&gt;              &lt;chr&gt;   &lt;int&gt; &lt;dbl&gt;
+    ##  1 Southwest          DAL      1786     1
+    ##  2 Continental        EWR      1117     1
+    ##  3 ExpressJet         CRP       822     1
+    ##  4 Delta              ATL       633     1
+    ##  5 US_Airways         CLT       598     1
+    ##  6 American_Eagle     DFW       593     1
+    ##  7 American           DFW       569     1
+    ##  8 AirTran            ATL       472     1
+    ##  9 SkyWest            COS       393     1
+    ## 10 Frontier           DEN       203     1
+    ## 11 Atlantic_Southeast DTW       201     1
+    ## 12 United             SFO       197     1
+    ## 13 JetBlue            JFK       188     1
+    ## 14 Alaska             SEA       105     1
+    ## 15 Mesa               CLT        31     1</code></pre>
+    <p style="text-align: justify;">
+    <strong>What are the most active airline routes in the weekend?</strong>
+    </p>
+    <pre class="r"><code>Airline_route &lt;- hflights %&gt;%
+      filter(DayOfWeek %in% c(6, 7)) %&gt;%
+      group_by(Origin, Dest) %&gt;%
+      summarise(flights = n()) %&gt;%
+      arrange(desc((flights))) %&gt;%
+      mutate(rank = rank(desc(flights))) %&gt;%
+      filter(rank %in% c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
+    
+    Airline_route</code></pre>
+    <pre><code>## # A tibble: 20 x 4
+    ## # Groups:   Origin [2]
+    ##    Origin Dest  flights  rank
+    ##    &lt;chr&gt;  &lt;chr&gt;   &lt;int&gt; &lt;dbl&gt;
+    ##  1 HOU    DAL      1786     1
+    ##  2 IAH    ORD      1608     1
+    ##  3 IAH    LAX      1311     2
+    ##  4 IAH    ATL      1292     3
+    ##  5 IAH    CLT      1254     4
+    ##  6 IAH    DFW      1155     5
+    ##  7 IAH    EWR      1117     6
+    ##  8 IAH    PHX      1041     7
+    ##  9 IAH    DEN      1026     8
+    ## 10 IAH    MSY       912     9
+    ## 11 IAH    AUS       865    10
+    ## 12 HOU    MSY       778     2
+    ## 13 HOU    ATL       704     3
+    ## 14 HOU    DEN       606     4
+    ## 15 HOU    DFW       593     5
+    ## 16 HOU    HRL       529     6
+    ## 17 HOU    MDW       505     7
+    ## 18 HOU    MCO       426     8
+    ## 19 HOU    LAS       396     9
+    ## 20 HOU    SAT       393    10</code></pre>
+    </div>
+    <div id="four-seasons" class="section level2">
+    <h2>Four Seasons!</h2>
+    <p style="text-align: justify;">
+    We will work now to extract seasonal insights from our dataset to see how the market trends differ from season to season. So, let’s ask: <strong>What are the ten most visited destinations in the weekend during each season?</strong>
+    </p>
+    <pre class="r"><code>allseasons &lt;- hflights %&gt;%
+      filter(DayOfWeek %in% c(6, 7)) %&gt;%
+      mutate(Season = case_when(Month %in% 3:5 ~ &quot;Spring&quot;, 
+                                Month %in% 9:11 ~ &quot;Autumn&quot;,
+                                Month %in% 6:8 ~ &quot;Summer&quot;, 
+                                Month %in% c(12, 1, 2) ~ &quot;Winter&quot;)) %&gt;%
+      filter(!is.na(Season)) %&gt;%
+      group_by(Season, Dest) %&gt;%
+      summarise(flights = n()) %&gt;%
+      filter(!is.na(flights)) %&gt;%
+      arrange(Season, desc(flights)) %&gt;%
+      slice(1:10)
+    
+    allseasons &lt;- as.data.frame(allseasons)
+    allseasons</code></pre>
+    <pre><code>##    Season Dest flights
+    ## 1  Autumn  DAL     508
+    ## 2  Autumn  ATL     470
+    ## 3  Autumn  DFW     429
+    ## 4  Autumn  MSY     418
+    ## 5  Autumn  LAX     416
+    ## 6  Autumn  DEN     412
+    ## 7  Autumn  ORD     386
+    ## 8  Autumn  PHX     321
+    ## 9  Autumn  AUS     317
+    ## 10 Autumn  CLT     311
+    ## 11 Spring  ATL     567
+    ## 12 Spring  DAL     544
+    ## 13 Spring  MSY     460
+    ## 14 Spring  DFW     426
+    ## 15 Spring  ORD     403
+    ## 16 Spring  LAX     398
+    ## 17 Spring  DEN     388
+    ## 18 Spring  PHX     355
+    ## 19 Spring  AUS     321
+    ## 20 Spring  CLT     318
+    ## 21 Summer  DAL     519
+    ## 22 Summer  LAX     494
+    ## 23 Summer  ATL     477
+    ## 24 Summer  DFW     444
+    ## 25 Summer  ORD     425
+    ## 26 Summer  DEN     423
+    ## 27 Summer  MSY     377
+    ## 28 Summer  PHX     356
+    ## 29 Summer  CLT     322
+    ## 30 Summer  EWR     312
+    ## 31 Winter  DAL     559
+    ## 32 Winter  ATL     482
+    ## 33 Winter  DFW     449
+    ## 34 Winter  MSY     435
+    ## 35 Winter  DEN     409
+    ## 36 Winter  ORD     394
+    ## 37 Winter  LAX     362
+    ## 38 Winter  PHX     344
+    ## 39 Winter  AUS     311
+    ## 40 Winter  SAT     309</code></pre>
+    <pre class="r"><code>colours &lt;- c(&quot;gray74&quot;, &quot;chartreuse3&quot;, &quot;darkgoldenrod1&quot;, &quot;deepskyblue3&quot;)
+    
+    ggplot(allseasons, aes(x = Dest, y = flights)) + geom_bar(aes(fill = Season), stat = &quot;identity&quot;) + 
+      facet_wrap(~ Season, scales = &quot;free&quot;) +
+      theme_minimal() + 
+      scale_fill_manual(values = colours)+
+      theme(panel.background = element_blank(),
+            axis.title.x = element_blank(),
+            axis.title.y = element_blank(),
+            legend.title = element_blank(),
+            legend.position = &quot;bottom&quot;, 
+            legend.text = element_text(size = 12, colour = &quot;black&quot;),
+            legend.key.size = unit(1, &#39;lines&#39;))</code></pre>
+    <p><img src="/post/2018-11-16-analysis-of-airlines-market-in-usa_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+    <p style="text-align: justify;">
+    Let’s plot a graph for each season.
+    </p>
+    <div id="spring" class="section level3">
+    <h3>Spring</h3>
+    <pre class="r"><code>ggplot(subset(allseasons, Season == &quot;Spring&quot;), aes(x = reorder(Dest, flights), y = flights)) + 
+      scale_y_continuous(limits = c(0, 600), breaks = c(0, 100, 200, 300, 400, 500, 600), labels = scales :: comma, name = &quot;Number of Flights&quot;) +
+      geom_bar(stat = &quot;identity&quot;, fill = &quot;chartreuse3&quot;, width = 0.65) +
+      theme_minimal() +
+      theme(axis.title.x = element_text(size = 14, colour = &quot;black&quot;, margin = margin(t=20)),
+            axis.title.y = element_blank(),
+            axis.text.x = element_text(colour = &quot;black&quot;, size = 13),
+            axis.text.y = element_text(colour = &quot;black&quot;, size = 13),
+            panel.background = element_blank(),
+            panel.grid = element_blank(),
+            plot.title = element_text(size = 16, colour = &quot;black&quot;, margin = margin(0,0,30,0))) + 
+      coord_flip() + 
+      labs(title = &quot;The Ten Most Visited Destinations in Spring&quot;)</code></pre>
+    <p><img src="/post/2018-11-16-analysis-of-airlines-market-in-usa_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+    </div>
+    <div id="summer" class="section level3">
+    <h3>Summer</h3>
+    <pre class="r"><code>ggplot(subset(allseasons, Season == &quot;Summer&quot;), aes(x = reorder(Dest, flights), y = flights)) + 
+      scale_y_continuous(limits = c(0, 600), breaks = c(0, 100, 200, 300, 400, 500, 600), labels = scales :: comma, name = &quot;Number of Flights&quot;) +
+      geom_bar(stat = &quot;identity&quot;, fill = &quot;darkgoldenrod1&quot;, width = 0.65) +
+      theme_minimal() +
+      theme(axis.title.x = element_text(size = 14, colour = &quot;black&quot;, margin = margin(t=20)),
+            axis.title.y = element_blank(),
+            axis.text.x = element_text(colour = &quot;black&quot;, size = 13),
+            axis.text.y = element_text(colour = &quot;black&quot;, size = 13),
+            panel.background = element_blank(),
+            panel.grid = element_blank(),
+            plot.title = element_text(size = 16, colour = &quot;black&quot;, margin = margin(0,0,30,0))) + 
+      coord_flip() + 
+      labs(title = &quot;The Ten Most Visited Destinations in Summer&quot;)</code></pre>
+    <p><img src="/post/2018-11-16-analysis-of-airlines-market-in-usa_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+    </div>
+    <div id="autumn" class="section level3">
+    <h3>Autumn</h3>
+    <pre class="r"><code>ggplot(subset(allseasons, Season == &quot;Autumn&quot;), aes(x = reorder(Dest, flights), y = flights)) + 
+      scale_y_continuous(limits = c(0, 600), breaks = c(0, 100, 200, 300, 400, 500, 600), labels = scales :: comma, name = &quot;Number of Flights&quot;) +
+      geom_bar(stat = &quot;identity&quot;, fill = &quot;gray74&quot;, width = 0.65) +
+      theme_minimal() +
+      theme(axis.title.x = element_text(size = 14, colour = &quot;black&quot;, margin = margin(t=20)),
+            axis.title.y = element_blank(),
+            axis.text.x = element_text(colour = &quot;black&quot;, size = 13),
+            axis.text.y = element_text(colour = &quot;black&quot;, size = 13),
+            panel.background = element_blank(),
+            panel.grid = element_blank(),
+            plot.title = element_text(size = 16, colour = &quot;black&quot;, margin = margin(0,0,30,0))) + 
+      coord_flip() + 
+      labs(title = &quot;The Ten Most Visited Destinations in Autumn&quot;)</code></pre>
+    <p><img src="/post/2018-11-16-analysis-of-airlines-market-in-usa_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+    </div>
+    <div id="winter" class="section level3">
+    <h3>Winter</h3>
+    <pre class="r"><code>ggplot(subset(allseasons, Season == &quot;Winter&quot;), aes(x = reorder(Dest, flights), y = flights)) + 
+      scale_y_continuous(limits = c(0, 600), breaks = c(0, 100, 200, 300, 400, 500, 600), labels = scales :: comma, name = &quot;Number of Flights&quot;) +
+      geom_bar(stat = &quot;identity&quot;, fill = &quot;deepskyblue3&quot;, width = 0.65) +
+      theme_minimal() +
+      theme(axis.title.x = element_text(size = 14, colour = &quot;black&quot;, margin = margin(t=20)),
+            axis.title.y = element_blank(),
+            axis.text.x = element_text(colour = &quot;black&quot;, size = 13),
+            axis.text.y = element_text(colour = &quot;black&quot;, size = 13),
+            panel.background = element_blank(),
+            panel.grid = element_blank(),
+            plot.title = element_text(size = 16, colour = &quot;black&quot;, margin = margin(0,0,30,0))) + 
+      coord_flip() + 
+      labs(title = &quot;The Ten Most Visited Destinations in Winter&quot;)</code></pre>
+    <p><img src="/post/2018-11-16-analysis-of-airlines-market-in-usa_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+    </div>
+    </div>
+    <div id="cancelled-delayed" class="section level2">
+    <h2>Cancelled … Delayed!</h2>
+    <p style="text-align: justify;">
+    Let’s try to extract some useful insights regarding the dealyed and cancelled flights by asking: <strong>Which carrier has the highest level of cancelled flights?</strong>
+    </P>
+    <pre class="r"><code>Cancelled_Carr &lt;- hflights %&gt;%
+      filter(Cancelled == 1) %&gt;%
+      group_by(Carrier) %&gt;%
+      summarise(cancelledflights = n()) %&gt;%
+      arrange(desc(cancelledflights)) %&gt;%
+      slice(1:5)
+    
+    Cancelled_Carr</code></pre>
+    <pre><code>## # A tibble: 5 x 2
+    ##   Carrier        cancelledflights
+    ##   &lt;chr&gt;                     &lt;int&gt;
+    ## 1 ExpressJet                 1132
+    ## 2 Southwest                   703
+    ## 3 Continental                 475
+    ## 4 SkyWest                     224
+    ## 5 American_Eagle              135</code></pre>
+    <pre class="r"><code>ggplot(Cancelled_Carr, aes(x=reorder(Carrier, cancelledflights), y=cancelledflights)) + 
+      geom_bar(stat = &quot;identity&quot;, fill = &quot;coral1&quot;) +
+      theme_minimal() + 
+      theme(panel.grid.major.x = element_blank()) + 
+      scale_y_continuous(limits = c(0, 1200), breaks = c(0, 200, 400, 600, 800, 1000, 1200), labels = scales :: comma) +
+      theme(axis.text.x = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;, angle = 65, vjust = 0.6)) + 
+      theme(axis.text.y = element_text(size = 10, colour = &quot;black&quot;)) + 
+      ylab(&quot;Number of Cancelled Flights&quot;) +
+      theme(axis.title.x = element_blank()) + 
+      theme(axis.title.y = element_text(size = 12, colour = &quot;black&quot;, face = &quot;bold&quot;, margin = margin(r=30))) +
+      labs(title = &quot;The Carriers with Highest Level of Cancelled Flights&quot;) +
+      theme(plot.title = element_text(size = 15, colour = &quot;black&quot;, margin = margin(0,0,30,0)))</code></pre>
+    <p><img src="/post/2018-11-16-analysis-of-airlines-market-in-usa_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+    <p style="text-align: justify;">
+    <strong>Which carrier has the highest average of arrival delay?</strong>
+    </p>
+    <pre class="r"><code>Carrier_arrdelay &lt;- hflights %&gt;%
+      filter(!is.na(ArrDelay), ArrDelay &gt; 0) %&gt;%
+      group_by(Carrier) %&gt;%
+      summarise(avg = mean(ArrDelay)) %&gt;%
+      mutate(rank = rank(avg)) %&gt;%
+      arrange(desc(rank))
+      
+    
+    Carrier_arrdelay</code></pre>
+    <pre><code>## # A tibble: 15 x 3
+    ##    Carrier              avg  rank
+    ##    &lt;chr&gt;              &lt;dbl&gt; &lt;dbl&gt;
+    ##  1 JetBlue             45.5    15
+    ##  2 Atlantic_Southeast  40.2    14
+    ##  3 American_Eagle      38.8    13
+    ##  4 United              32.5    12
+    ##  5 Delta               32.1    11
+    ##  6 American            28.5    10
+    ##  7 AirTran             27.9     9
+    ##  8 Southwest           25.3     8
+    ##  9 ExpressJet          24.2     7
+    ## 10 SkyWest             24.1     6
+    ## 11 Alaska              22.9     5
+    ## 12 Continental         22.1     4
+    ## 13 US_Airways          20.7     3
+    ## 14 Frontier            18.7     2
+    ## 15 Mesa                18.7     1</code></pre>
+    <pre class="r"><code>ggplot(Carrier_arrdelay, aes(x = reorder(Carrier, avg), y = avg)) + 
+      geom_bar(stat = &quot;identity&quot;, fill = &quot;#20948B&quot;) +
+      theme_minimal()+
+      scale_y_continuous(limits = c(0, 50), breaks = c(0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50), labels = scales :: comma) +
+      theme(axis.title.x = element_blank()) +
+      theme(axis.text.x = element_text(size = 10, face = &quot;bold&quot;, colour = &quot;black&quot;, angle = 65, vjust = 0.6)) +
+      theme(axis.text.y = element_text(size = 10, face = &quot;bold&quot;, colour = &quot;black&quot;)) +
+      ylab(&quot;Average of Delay&quot;) +
+      theme(axis.title.y = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;, margin = margin(r=30))) +
+      theme(panel.grid.major.x = element_blank()) +
+      labs(title = &quot;The Average of Arrival Delay for each Carrier&quot;, subtitle = &quot;Minutes&quot;) +
+      theme(plot.title = element_text(size = 15, colour = &quot;black&quot;))</code></pre>
+    <p><img src="/post/2018-11-16-analysis-of-airlines-market-in-usa_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+    <p style="text-align: justify;">
+    <strong>Which carrier has the highest average of departure delay?</strong>
+    </p>
+    <pre class="r"><code>Carrier_depdelay &lt;- hflights %&gt;%
+      filter(!is.na(DepDelay), DepDelay &gt; 0) %&gt;%
+      group_by(Carrier) %&gt;%
+      summarise(avg = mean(DepDelay)) %&gt;%
+      mutate(rank = rank(avg)) %&gt;%
+      arrange(rank)
+    
+    
+    Carrier_depdelay</code></pre>
+    <pre><code>## # A tibble: 15 x 3
+    ##    Carrier              avg  rank
+    ##    &lt;chr&gt;              &lt;dbl&gt; &lt;dbl&gt;
+    ##  1 Continental         17.9     1
+    ##  2 Alaska              20.8     2
+    ##  3 Southwest           21.9     3
+    ##  4 Frontier            22.7     4
+    ##  5 Mesa                24.5     5
+    ##  6 SkyWest             24.6     6
+    ##  7 American            24.7     7
+    ##  8 US_Airways          26.5     8
+    ##  9 ExpressJet          26.9     9
+    ## 10 United              28.8    10
+    ## 11 Delta               32.4    11
+    ## 12 AirTran             33.4    12
+    ## 13 American_Eagle      37.9    13
+    ## 14 JetBlue             43.5    14
+    ## 15 Atlantic_Southeast  49.3    15</code></pre>
+    <pre class="r"><code>ggplot(Carrier_depdelay, aes(x = reorder(Carrier, avg), y = avg)) + 
+      geom_bar(stat = &quot;identity&quot;, fill = &quot;#6AB187&quot;) +
+      theme_minimal()+
+      scale_y_continuous(limits = c(0, 50), breaks = c(0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50), labels = scales :: comma) +
+      theme(axis.title.x = element_blank()) +
+      theme(axis.text.x = element_text(size = 10, face = &quot;bold&quot;, colour = &quot;black&quot;, angle = 65, vjust = 0.6)) +
+      theme(axis.text.y = element_text(size = 10, face = &quot;bold&quot;, colour = &quot;black&quot;)) +
+      ylab(&quot;Average of Delay&quot;) +
+      theme(axis.title.y = element_text(size = 12, face = &quot;bold&quot;, colour = &quot;black&quot;, margin = margin(r=30))) +
+      theme(panel.grid.major.x = element_blank()) +
+      labs(title = &quot;The Average of Departure Delay for each Carrier&quot;, subtitle = &quot;Minutes&quot;) +
+      theme(plot.title = element_text(size = 15, colour = &quot;black&quot;))</code></pre>
+    <p><img src="/post/2018-11-16-analysis-of-airlines-market-in-usa_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+    <div id="conclusion1" class="section level3">
+    <h3>Conclusion1:</h3>
+    <p style="text-align: justify;">
+    The first three graphs show that the two dominant carriers share almost the same performance pattern. Within a given week, both <strong>ExpressJet</strong> and <strong>Continental</strong> have their highest numbers of flights on Monday, Thursday and Friday, while the number of flights reaches its trough on Saturday. The data for daily performance within a month reveals that the number of flights usually slip on 4th and 29th for both carriers and that <strong>ExpressJet’s</strong> flights peak on 28th. The monthly data shows that both carriers have their flight reaching a peak in July at 6174 and 6728 flights for <strong>Continental</strong> and <strong>ExpressJet</strong> respectively. The same data shows also that the trough for both carriers takes place in February and that, opposed to the general trend, <strong>Continental’s</strong> flights outpace <strong>ExpressJet’s</strong> ones during the last three month of the year.
+    </p>
+    </div>
+    <div id="conclusion2" class="section level3">
+    <h3>Conclusion2:</h3>
+    <p style="text-align: justify;">
+    The extracted data reveals that we have only two airports (George Bush Intercontinental/Houston Airport and William P. Hobby Airport) as departure points for all carriers in the dataset. The data also shows that Dallas Love Airport is the most visited destination in the weekend when it comes to Southwest airlines while Charlotte Douglas International Airport is the most visited destination in the weekend when it comes to Mesa Airlines. The data reveals in addition that the route from William P. Hobby Airport to Dallas Love Field Airport is the most active route during the weekend.
+    </p>
+    </div>
+    <div id="conclusion3" class="section level3">
+    <h3>Conclusion3:</h3>
+    <p style="text-align: justify;">
+    The seasonal insights shows that Dallas Love Field Airport is the most visited destination in autumn, winter and summer during the weekend while Hartsfield–Jackson Atlanta International Airport is the most visited destination in spring. The data also shows that Charlotte Douglas International Airport is the less visited destination in autumn and spring during the weekend. As for summer and winter, Newark Liberty International Airport and San Antonio International Airport are the less visited destinations respectively.
+    </p>
+    </div>
+    <div id="conclusion4" class="section level3">
+    <h3>Conclusion4:</h3>
+    <p style="text-align: justify;">
+    The data shows that <strong>ExpressJet</strong> and <strong>Southwest</strong> have the highest numbers of cancelled flights and this result seems intuitive as these carriers have the highest number of flights. The data shows that <strong>JetBlue</strong> and <strong>AtlanticSoutheast</strong> have the highest average of departure and arrival delays while <strong>Mesa</strong> has the lwoest average of dealys.
+    </p>
+    </div>
+    </div>
