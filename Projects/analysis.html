@@ -566,7 +566,7 @@
     </div>
     <div id="winter" class="section level3">
     <h3>Winter</h3>
-    <pre class="r"><code>ggplot(subset(allseasons, Season == &quot;Winter&quot;), aes(x = reorder(Dest, flights), y = flights)) + 
+    <code>ggplot(subset(allseasons, Season == &quot;Winter&quot;), aes(x = reorder(Dest, flights), y = flights)) + 
       scale_y_continuous(limits = c(0, 600), breaks = c(0, 100, 200, 300, 400, 500, 600), labels = scales :: comma, name = &quot;Number of Flights&quot;) +
       geom_bar(stat = &quot;identity&quot;, fill = &quot;deepskyblue3&quot;, width = 0.65) +
       theme_minimal() +
@@ -578,7 +578,8 @@
             panel.grid = element_blank(),
             plot.title = element_text(size = 16, colour = &quot;black&quot;, margin = margin(0,0,30,0))) + 
       coord_flip() + 
-      labs(title = &quot;The Ten Most Visited Destinations in Winter&quot;)</code></pre>
+      labs(title = &quot;The Ten Most Visited Destinations in Winter&quot;)</code>
+      
     <p><img src="/post/2018-11-16-analysis-of-airlines-market-in-usa_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
     </div>
     </div>
