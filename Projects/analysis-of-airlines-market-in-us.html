@@ -500,6 +500,90 @@
 																	## 18 HOU    MCO       426     8
 																	## 19 HOU    LAS       396     9
 																	## 20 HOU    SAT       393    10</code></pre>
+
+																	<h2>Four Seasons!</h2>
+																	<p>We will work now to extract seasonal insights from our dataset to see how the market trends differ from season to season. So, let’s ask: <h2>What are the ten most visited destinations in the weekend during each season?</h2></p>
+
+																	<pre><code>allseasons <- hflights %>%
+																		filter(DayOfWeek %in% c(6, 7)) %>%
+																		mutate(Season = case_when(Month %in% 3:5 ~ "Spring", 
+																								  Month %in% 9:11 ~ "Autumn",
+																								  Month %in% 6:8 ~ "Summer", 
+																								  Month %in% c(12, 1, 2) ~ "Winter")) %>%
+																		filter(!is.na(Season)) %>%
+																		group_by(Season, Dest) %>%
+																		summarise(flights = n()) %>%
+																		filter(!is.na(flights)) %>%
+																		arrange(Season, desc(flights)) %>%
+																		slice(1:10)
+																	  
+																	  allseasons <- as.data.frame(allseasons)
+																	  allseasons</code></pre>
+
+																	  <pre><code>##    Season Dest flights
+																		## 1  Autumn  DAL     508
+																		## 2  Autumn  ATL     470
+																		## 3  Autumn  DFW     429
+																		## 4  Autumn  MSY     418
+																		## 5  Autumn  LAX     416
+																		## 6  Autumn  DEN     412
+																		## 7  Autumn  ORD     386
+																		## 8  Autumn  PHX     321
+																		## 9  Autumn  AUS     317
+																		## 10 Autumn  CLT     311
+																		## 11 Spring  ATL     567
+																		## 12 Spring  DAL     544
+																		## 13 Spring  MSY     460
+																		## 14 Spring  DFW     426
+																		## 15 Spring  ORD     403
+																		## 16 Spring  LAX     398
+																		## 17 Spring  DEN     388
+																		## 18 Spring  PHX     355
+																		## 19 Spring  AUS     321
+																		## 20 Spring  CLT     318
+																		## 21 Summer  DAL     519
+																		## 22 Summer  LAX     494
+																		## 23 Summer  ATL     477
+																		## 24 Summer  DFW     444
+																		## 25 Summer  ORD     425
+																		## 26 Summer  DEN     423
+																		## 27 Summer  MSY     377
+																		## 28 Summer  PHX     356
+																		## 29 Summer  CLT     322
+																		## 30 Summer  EWR     312
+																		## 31 Winter  DAL     559
+																		## 32 Winter  ATL     482
+																		## 33 Winter  DFW     449
+																		## 34 Winter  MSY     435
+																		## 35 Winter  DEN     409
+																		## 36 Winter  ORD     394
+																		## 37 Winter  LAX     362
+																		## 38 Winter  PHX     344
+																		## 39 Winter  AUS     311
+																		## 40 Winter  SAT     309</code></pre>
+
+																		<pre><code>## 
+																			colours <- c("gray74", "chartreuse3", "darkgoldenrod1", "deepskyblue3")
+																			
+																			ggplot(allseasons, aes(x = Dest, y = flights)) + geom_bar(aes(fill = Season), stat = "identity") + 
+																			  facet_wrap(~ Season, scales = "free") +
+																			  theme_minimal() + 
+																			  scale_fill_manual(values = colours)+
+																			  theme(panel.background = element_blank(),
+																					axis.title.x = element_blank(),
+																					axis.title.y = element_blank(),
+																					legend.title = element_blank(),
+																					legend.position = "bottom", 
+																					legend.text = element_text(size = 12, colour = "black"),
+																					legend.key.size = unit(1, 'lines'))</code></pre>
+
+																					<img src="../images/seasons-destinations.png" alt="">
+
+																					
+
+
+
+
 								
 
 
