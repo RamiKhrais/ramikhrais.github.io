@@ -188,11 +188,11 @@
 
 										<img src="../images/hflights-carriers-dominant.png" alt="">
 
-										<p>It seems that <strong>ExpressJet</strong> along with <strong>Continental</strong> have the lion’s share of the number of flights. We can go much deeper now and examine the performance of both carriers within different time ranges</p>
+									<p>It seems that <strong>ExpressJet</strong> along with <strong>Continental</strong> have the lion’s share of the number of flights. We can go much deeper now and examine the performance of both carriers within different time ranges</p>
 
-										<h2>How do ExpressJet and Continental perform daily within one week?</h2>
+									<h2>How do ExpressJet and Continental perform daily within one week?</h2>
 
-										<pre><code>two_largest_daily <- hflights %>%
+									<pre><code>two_largest_daily <- hflights %>%
 											filter(DayOfWeek %in% c(1, 2, 3, 4, 5, 6, 7)) %>%
 											filter(Cancelled == 0) %>%
 											filter(Carrier %in% c("Continental", "ExpressJet")) %>%
@@ -201,7 +201,7 @@
 										  
 										  two_largest_daily</code></pre>
 
-										  <pre><code>## # A tibble: 14 x 3
+								    <pre><code>## # A tibble: 14 x 3
 											## # Groups:   Carrier [?]
 											##    Carrier     DayOfWeek flights
 											##    <chr>           <int>   <int>
@@ -220,7 +220,7 @@
 											## 13 ExpressJet          6    8502
 											## 14 ExpressJet          7   10376</code></pre>
 
-											<pre><code>ggplot(two_largest_daily, aes(x= DayOfWeek, y= flights, col = Carrier)) + 
+										<pre><code>ggplot(two_largest_daily, aes(x= DayOfWeek, y= flights, col = Carrier)) + 
 												geom_line(size = 1.2) +
 												theme_minimal() +
 												geom_point(size = 3.2, shape = 21, fill = "white", stroke = 2.5) + 
@@ -239,11 +239,11 @@
 												labs(title = "The Two Largest Players in the Market", subtitle = "Daily Flights in a Week") + 
 												theme(plot.title = element_text(size = 15))</code></pre>
 
-												<img src="../images/two-largest-players.png" alt="">
+										<img src="../images/two-largest-players.png" alt="">
 
-												<h2>How do ExpressJet and Continental perform daily within one month?</h2>
+										<h2>How do ExpressJet and Continental perform daily within one month?</h2>
 
-												<pre><code>two_largest_daily_month <- hflights %>%
+										<pre><code>two_largest_daily_month <- hflights %>%
 													filter(DayofMonth %in% c(1:30)) %>%
 													filter(Cancelled == 0) %>%
 													filter(Carrier %in% c("ExpressJet", "Continental")) %>%
@@ -254,7 +254,7 @@
 												  two_largest_daily_month <- as.data.frame(two_largest_daily_month)
 												  two_largest_daily_month</code></pre>
 
-												  <pre><code>##        Carrier DayofMonth flights
+										<pre><code>##        Carrier DayofMonth flights
 													## 1  Continental          1    2249
 													## 2  Continental          2    2289
 													## 3  Continental          3    2254
@@ -316,7 +316,7 @@
 													## 59  ExpressJet         29    2033
 													## 60  ExpressJet         30    2094</code></pre>
 
-													<pre><code>ggplot(two_largest_daily_month, aes(x= DayofMonth, y= flights, col= Carrier)) +
+										<pre><code>ggplot(two_largest_daily_month, aes(x= DayofMonth, y= flights, col= Carrier)) +
 														geom_line(size = 1.2) +
 														geom_point(size = 3.2, shape = 21, fill = "white", stroke = 2.5) +
 														theme_minimal() + 
@@ -336,11 +336,11 @@
 														labs(title = "The Two Largest Players in the Market", subtitle = "Daily Flights in a Month") + 
 														theme(plot.title = element_text(size = 15))</code></pre>
 
-														<img src="../images/two-largest-players-m.png" alt="">
+										<img src="../images/two-largest-players-m.png" alt="">
 
-														<h2>How do ExpressJet and Continental perform monthly?</h2>
+										<h2>How do ExpressJet and Continental perform monthly?</h2>
 
-														<pre><code>two_largest_monthly <- hflights %>%
+										<pre><code>two_largest_monthly <- hflights %>%
 															filter(Month %in% c(1:12)) %>%
 															filter(Cancelled == 0) %>%
 															filter(Carrier %in% c("ExpressJet", "Continental")) %>%
@@ -351,7 +351,7 @@
 														  two_largest_monthly <- as.data.frame(two_largest_monthly)
 														  two_largest_monthly</code></pre>
 
-														  <pre><code>##        Carrier Month flights
+										<pre><code>##        Carrier Month flights
 															## 1  Continental     1    6010
 															## 2  Continental     2    5181
 															## 3  Continental     3    6024
@@ -377,7 +377,7 @@
 															## 23  ExpressJet    11    5309
 															## 24  ExpressJet    12    5772</code></pre>
 														
-														<pre><code>ggplot(two_largest_monthly, aes(x= Month, y= flights, col = Carrier)) +
+										<pre><code>ggplot(two_largest_monthly, aes(x= Month, y= flights, col = Carrier)) +
 															geom_line(size = 1.2) +
 															geom_point(size = 3.2, shape = 21, fill = "white", stroke = 2.5) +
 															theme_minimal() +
@@ -397,12 +397,12 @@
 															labs(title = "The Largest Players in the Market", subtitle = "Monthly Flights") +
 															theme(plot.title = element_text(size = 15, colour = "black"))</code></pre>
 
-														<img src="../images/two-largest-players-mm.png" alt="">
+										<img src="../images/two-largest-players-mm.png" alt="">
 
-														<h2>More Insights Ahead</h2>
-														<p>Everthing looks good so far. Let’s try now to get some spatial insights by aaking: <h2>What is the most active departure airport for each carrier in the weekend?</h2></p>
+										<h2>More Insights Ahead</h2>
+										<p>Everthing looks good so far. Let’s try now to get some spatial insights by aaking: <h2>What is the most active departure airport for each carrier in the weekend?</h2></p>
 
-														<pre><code>Origin_carr <- hflights %>%
+										<pre><code>Origin_carr <- hflights %>%
 															filter(DayOfWeek %in% c(6, 7)) %>%
 															group_by(Carrier, Origin) %>%
 															summarise(flights = n()) %>%
@@ -412,7 +412,7 @@
 														  
 														  Origin_carr</code></pre>
 
-														  <pre><code>## # A tibble: 15 x 4
+										<pre><code>## # A tibble: 15 x 4
 															## # Groups:   Carrier [15]
 															##    Carrier            Origin flights  rank
 															##    <chr>              <chr>    <int> <dbl>
@@ -432,9 +432,9 @@
 															## 14 Alaska             IAH        105     1
 															## 15 Mesa               IAH         39     1</code></pre>
 
-															<h2>What is the most visited destination for each carrier in the weekend?</h2>
+										<h2>What is the most visited destination for each carrier in the weekend?</h2>
 
-															<pre><code>Dest_carr <- hflights %>% 
+										<pre><code>Dest_carr <- hflights %>% 
 																filter(DayOfWeek %in% c(6, 7)) %>%
 																group_by(Carrier, Dest) %>%
 																summarise(flights = n()) %>%
@@ -444,7 +444,7 @@
 															  
 															  Dest_carr</code></pre>
 
-															  <pre><code>## # A tibble: 15 x 4
+										<pre><code>## # A tibble: 15 x 4
 																## # Groups:   Carrier [15]
 																##    Carrier            Dest  flights  rank
 																##    <chr>              <chr>   <int> <dbl>
@@ -464,9 +464,9 @@
 																## 14 Alaska             SEA       105     1
 																## 15 Mesa               CLT        31     1</code></pre>
 
-																<h2>What are the most active airline routes in the weekend?</h2>
+										<h2>What are the most active airline routes in the weekend?</h2>
 
-																<pre><code>Airline_route <- hflights %>%
+									    <pre><code>Airline_route <- hflights %>%
 																	filter(DayOfWeek %in% c(6, 7)) %>%
 																	group_by(Origin, Dest) %>%
 																	summarise(flights = n()) %>%
@@ -476,7 +476,7 @@
 																  
 																  Airline_route</code></pre>
 
-																  <pre><code>## # A tibble: 20 x 4
+										<pre><code>## # A tibble: 20 x 4
 																	## # Groups:   Origin [2]
 																	##    Origin Dest  flights  rank
 																	##    <chr>  <chr>   <int> <dbl>
@@ -501,10 +501,10 @@
 																	## 19 HOU    LAS       396     9
 																	## 20 HOU    SAT       393    10</code></pre>
 
-																	<h2>Four Seasons!</h2>
-																	<p>We will work now to extract seasonal insights from our dataset to see how the market trends differ from season to season. So, let’s ask: <h2>What are the ten most visited destinations in the weekend during each season?</h2></p>
+										<h2>Four Seasons!</h2>
+										<p>We will work now to extract seasonal insights from our dataset to see how the market trends differ from season to season. So, let’s ask: <h2>What are the ten most visited destinations in the weekend during each season?</h2></p>
 
-																	<pre><code>allseasons <- hflights %>%
+										<pre><code>allseasons <- hflights %>%
 																		filter(DayOfWeek %in% c(6, 7)) %>%
 																		mutate(Season = case_when(Month %in% 3:5 ~ "Spring", 
 																								  Month %in% 9:11 ~ "Autumn",
@@ -520,7 +520,7 @@
 																	  allseasons <- as.data.frame(allseasons)
 																	  allseasons</code></pre>
 
-																	  <pre><code>##    Season Dest flights
+										<pre><code>##    Season Dest flights
 																		## 1  Autumn  DAL     508
 																		## 2  Autumn  ATL     470
 																		## 3  Autumn  DFW     429
@@ -562,7 +562,7 @@
 																		## 39 Winter  AUS     311
 																		## 40 Winter  SAT     309</code></pre>
 
-																		<pre><code>## 
+										<pre><code>## 
 																			colours <- c("gray74", "chartreuse3", "darkgoldenrod1", "deepskyblue3")
 																			
 																			ggplot(allseasons, aes(x = Dest, y = flights)) + geom_bar(aes(fill = Season), stat = "identity") + 
@@ -577,9 +577,138 @@
 																					legend.text = element_text(size = 12, colour = "black"),
 																					legend.key.size = unit(1, 'lines'))</code></pre>
 
-																					<img src="../images/seasons-destinations.png" alt="">
+										<img src="../images/seasons-destinations.png" alt="">
+
+										<p>Let’s plot a graph for each season</p>
+
+										<h2>Spring</h2>
+
+									    <pre><code>ggplot(subset(allseasons, Season == "Spring"), aes(x = reorder(Dest, flights), y = flights)) + 
+																				scale_y_continuous(limits = c(0, 600), breaks = c(0, 100, 200, 300, 400, 500, 600), labels = scales :: comma, name = "Number of Flights") +
+																				geom_bar(stat = "identity", fill = "chartreuse3", width = 0.65) +
+																				theme_minimal() +
+																				theme(axis.title.x = element_text(size = 14, colour = "black", margin = margin(t=20)),
+																					  axis.title.y = element_blank(),
+																					  axis.text.x = element_text(colour = "black", size = 13),
+																					  axis.text.y = element_text(colour = "black", size = 13),
+																					  panel.background = element_blank(),
+																					  panel.grid = element_blank(),
+																					  plot.title = element_text(size = 16, colour = "black", margin = margin(0,0,30,0))) + 
+																				coord_flip() + 
+																				labs(title = "The Ten Most Visited Destinations in Spring")</code></pre>
+
+										<img src="../images/spring.png" alt="">
+
+										<h2>Summer!</h2>
+
+										<pre><code>ggplot(subset(allseasons, Season == "Summer"), aes(x = reorder(Dest, flights), y = flights)) + 
+																					scale_y_continuous(limits = c(0, 600), breaks = c(0, 100, 200, 300, 400, 500, 600), labels = scales :: comma, name = "Number of Flights") +
+																					geom_bar(stat = "identity", fill = "darkgoldenrod1", width = 0.65) +
+																					theme_minimal() +
+																					theme(axis.title.x = element_text(size = 14, colour = "black", margin = margin(t=20)),
+																						  axis.title.y = element_blank(),
+																						  axis.text.x = element_text(colour = "black", size = 13),
+																						  axis.text.y = element_text(colour = "black", size = 13),
+																						  panel.background = element_blank(),
+																						  panel.grid = element_blank(),
+																						  plot.title = element_text(size = 16, colour = "black", margin = margin(0,0,30,0))) + 
+																					coord_flip() + 
+																					labs(title = "The Ten Most Visited Destinations in Summer")</code></pre>
+
+										<img src="../images/summer.png" alt="">
+
+										<h2>Autumn</h2>
+
+										<pre><code>ggplot(subset(allseasons, Season == "Autumn"), aes(x = reorder(Dest, flights), y = flights)) + 
+																						scale_y_continuous(limits = c(0, 600), breaks = c(0, 100, 200, 300, 400, 500, 600), labels = scales :: comma, name = "Number of Flights") +
+																						geom_bar(stat = "identity", fill = "gray74", width = 0.65) +
+																						theme_minimal() +
+																						theme(axis.title.x = element_text(size = 14, colour = "black", margin = margin(t=20)),
+																							  axis.title.y = element_blank(),
+																							  axis.text.x = element_text(colour = "black", size = 13),
+																							  axis.text.y = element_text(colour = "black", size = 13),
+																							  panel.background = element_blank(),
+																							  panel.grid = element_blank(),
+																							  plot.title = element_text(size = 16, colour = "black", margin = margin(0,0,30,0))) + 
+																						coord_flip() + 
+																						labs(title = "The Ten Most Visited Destinations in Autumn")</code></pre>
+
+										<img src="../images/autumn.png" alt="">
+
+										<h2>ggplot(subset(allseasons, Season == "Winter"), aes(x = reorder(Dest, flights), y = flights)) + 
+											scale_y_continuous(limits = c(0, 600), breaks = c(0, 100, 200, 300, 400, 500, 600), labels = scales :: comma, name = "Number of Flights") +
+											geom_bar(stat = "identity", fill = "deepskyblue3", width = 0.65) +
+											theme_minimal() +
+											theme(axis.title.x = element_text(size = 14, colour = "black", margin = margin(t=20)),
+												  axis.title.y = element_blank(),
+												  axis.text.x = element_text(colour = "black", size = 13),
+												  axis.text.y = element_text(colour = "black", size = 13),
+												  panel.background = element_blank(),
+												  panel.grid = element_blank(),
+												  plot.title = element_text(size = 16, colour = "black", margin = margin(0,0,30,0))) + 
+											coord_flip() + 
+											labs(title = "The Ten Most Visited Destinations in Winter")</h2>
+
+										<h2>Winter</h2>
+
+										<pre><code>ggplot(subset(allseasons, Season == "Winter"), aes(x = reorder(Dest, flights), y = flights)) + 
+											scale_y_continuous(limits = c(0, 600), breaks = c(0, 100, 200, 300, 400, 500, 600), labels = scales :: comma, name = "Number of Flights") +
+											geom_bar(stat = "identity", fill = "deepskyblue3", width = 0.65) +
+											theme_minimal() +
+											theme(axis.title.x = element_text(size = 14, colour = "black", margin = margin(t=20)),
+												  axis.title.y = element_blank(),
+												  axis.text.x = element_text(colour = "black", size = 13),
+												  axis.text.y = element_text(colour = "black", size = 13),
+												  panel.background = element_blank(),
+												  panel.grid = element_blank(),
+												  plot.title = element_text(size = 16, colour = "black", margin = margin(0,0,30,0))) + 
+											coord_flip() + 
+											labs(title = "The Ten Most Visited Destinations in Winter")</code></pre>
+
+										<img src="../images/winter.png" alt="">
+
+										<h2>Cancelled … Delayed!</h2>
+
+										<p>Let’s try to extract some useful insights regarding the dealyed and cancelled flights by asking: <h2>Which carrier has the highest level of cancelled flights?</h2></p>
+
+										<pre><code>Cancelled_Carr <- hflights %>%
+											filter(Cancelled == 1) %>%
+											group_by(Carrier) %>%
+											summarise(cancelledflights = n()) %>%
+											arrange(desc(cancelledflights)) %>%
+											slice(1:5)
+										  
+										  Cancelled_Carr</code></pre>
+
+										<pre><code>## # A tibble: 5 x 2
+											##   Carrier        cancelledflights
+											##   <chr>                     <int>
+											## 1 ExpressJet                 1132
+											## 2 Southwest                   703
+											## 3 Continental                 475
+											## 4 SkyWest                     224
+											## 5 American_Eagle              135</code></pre>
+
+										<pre><code>ggplot(Cancelled_Carr, aes(x=reorder(Carrier, cancelledflights), y=cancelledflights)) + 
+											geom_bar(stat = "identity", fill = "coral1") +
+											theme_minimal() + 
+											theme(panel.grid.major.x = element_blank()) + 
+											scale_y_continuous(limits = c(0, 1200), breaks = c(0, 200, 400, 600, 800, 1000, 1200), labels = scales :: comma) +
+											theme(axis.text.x = element_text(size = 12, face = "bold", colour = "black", angle = 65, vjust = 0.6)) + 
+											theme(axis.text.y = element_text(size = 10, colour = "black")) + 
+											ylab("Number of Cancelled Flights") +
+											theme(axis.title.x = element_blank()) + 
+											theme(axis.title.y = element_text(size = 12, colour = "black", face = "bold", margin = margin(r=30))) +
+											labs(title = "The Carriers with Highest Level of Cancelled Flights") +
+											theme(plot.title = element_text(size = 15, colour = "black", margin = margin(0,0,30,0)))</code></pre>
+
+										<img src="../images/highest-delays.png" alt="">
+
+										
 
 																					
+
+
 
 
 
