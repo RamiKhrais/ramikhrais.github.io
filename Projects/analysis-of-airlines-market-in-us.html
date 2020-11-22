@@ -635,19 +635,6 @@
 
 										<img src="../images/autumn.png" alt="">
 
-										<h2>ggplot(subset(allseasons, Season == "Winter"), aes(x = reorder(Dest, flights), y = flights)) + 
-											scale_y_continuous(limits = c(0, 600), breaks = c(0, 100, 200, 300, 400, 500, 600), labels = scales :: comma, name = "Number of Flights") +
-											geom_bar(stat = "identity", fill = "deepskyblue3", width = 0.65) +
-											theme_minimal() +
-											theme(axis.title.x = element_text(size = 14, colour = "black", margin = margin(t=20)),
-												  axis.title.y = element_blank(),
-												  axis.text.x = element_text(colour = "black", size = 13),
-												  axis.text.y = element_text(colour = "black", size = 13),
-												  panel.background = element_blank(),
-												  panel.grid = element_blank(),
-												  plot.title = element_text(size = 16, colour = "black", margin = margin(0,0,30,0))) + 
-											coord_flip() + 
-											labs(title = "The Ten Most Visited Destinations in Winter")</h2>
 
 										<h2>Winter</h2>
 
@@ -704,7 +691,116 @@
 
 										<img src="../images/highest-delays.png" alt="">
 
+										<h2>Which carrier has the highest average of arrival delay?</h2>
+
+										<pre><code>Carrier_arrdelay <- hflights %>%
+											filter(!is.na(ArrDelay), ArrDelay > 0) %>%
+											group_by(Carrier) %>%
+											summarise(avg = mean(ArrDelay)) %>%
+											mutate(rank = rank(avg)) %>%
+											arrange(desc(rank))
+											
+										  
+										  Carrier_arrdelay</code></pre>
+
+										<pre><code>## # A tibble: 15 x 3
+											##    Carrier              avg  rank
+											##    <chr>              <dbl> <dbl>
+											##  1 JetBlue             45.5    15
+											##  2 Atlantic_Southeast  40.2    14
+											##  3 American_Eagle      38.8    13
+											##  4 United              32.5    12
+											##  5 Delta               32.1    11
+											##  6 American            28.5    10
+											##  7 AirTran             27.9     9
+											##  8 Southwest           25.3     8
+											##  9 ExpressJet          24.2     7
+											## 10 SkyWest             24.1     6
+											## 11 Alaska              22.9     5
+											## 12 Continental         22.1     4
+											## 13 US_Airways          20.7     3
+											## 14 Frontier            18.7     2
+											## 15 Mesa                18.7     1</code></pre>
+
 										
+										<pre><code>ggplot(Carrier_arrdelay, aes(x = reorder(Carrier, avg), y = avg)) + 
+												geom_bar(stat = "identity", fill = "#20948B") +
+												theme_minimal()+
+												scale_y_continuous(limits = c(0, 50), breaks = c(0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50), labels = scales :: comma) +
+												theme(axis.title.x = element_blank()) +
+												theme(axis.text.x = element_text(size = 10, face = "bold", colour = "black", angle = 65, vjust = 0.6)) +
+												theme(axis.text.y = element_text(size = 10, face = "bold", colour = "black")) +
+												ylab("Average of Delay") +
+												theme(axis.title.y = element_text(size = 12, face = "bold", colour = "black", margin = margin(r=30))) +
+												theme(panel.grid.major.x = element_blank()) +
+												labs(title = "The Average of Arrival Delay for each Carrier", subtitle = "Minutes") +
+												theme(plot.title = element_text(size = 15, colour = "black"))</code></pre>
+
+										<img src="../images/average-delay.png" alt="">
+
+
+										<h2>Which carrier has the highest average of departure delay?</h2>
+
+										<pre><code>Carrier_depdelay <- hflights %>%
+											filter(!is.na(DepDelay), DepDelay > 0) %>%
+											group_by(Carrier) %>%
+											summarise(avg = mean(DepDelay)) %>%
+											mutate(rank = rank(avg)) %>%
+											arrange(rank)
+										  
+										  
+										  Carrier_depdelay</code></pre>
+
+										<pre><code>## # A tibble: 15 x 3
+											##    Carrier              avg  rank
+											##    <chr>              <dbl> <dbl>
+											##  1 Continental         17.9     1
+											##  2 Alaska              20.8     2
+											##  3 Southwest           21.9     3
+											##  4 Frontier            22.7     4
+											##  5 Mesa                24.5     5
+											##  6 SkyWest             24.6     6
+											##  7 American            24.7     7
+											##  8 US_Airways          26.5     8
+											##  9 ExpressJet          26.9     9
+											## 10 United              28.8    10
+											## 11 Delta               32.4    11
+											## 12 AirTran             33.4    12
+											## 13 American_Eagle      37.9    13
+											## 14 JetBlue             43.5    14
+											## 15 Atlantic_Southeast  49.3    15</code></pre>
+
+										<pre><code>ggplot(Carrier_depdelay, aes(x = reorder(Carrier, avg), y = avg)) + 
+											geom_bar(stat = "identity", fill = "#6AB187") +
+											theme_minimal()+
+											scale_y_continuous(limits = c(0, 50), breaks = c(0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50), labels = scales :: comma) +
+											theme(axis.title.x = element_blank()) +
+											theme(axis.text.x = element_text(size = 10, face = "bold", colour = "black", angle = 65, vjust = 0.6)) +
+											theme(axis.text.y = element_text(size = 10, face = "bold", colour = "black")) +
+											ylab("Average of Delay") +
+											theme(axis.title.y = element_text(size = 12, face = "bold", colour = "black", margin = margin(r=30))) +
+											theme(panel.grid.major.x = element_blank()) +
+											labs(title = "The Average of Departure Delay for each Carrier", subtitle = "Minutes") +
+											theme(plot.title = element_text(size = 15, colour = "black"))</code></pre>
+
+										<img src="../images/average-delay-departure.png" alt="">
+
+
+										<h2>Conclusion1:</h2>
+										<p>The first three graphs show that the two dominant carriers share almost the same performance pattern. Within a given week, both ExpressJet and Continental have their highest numbers of flights on Monday, Thursday and Friday, while the number of flights reaches its trough on Saturday. The data for daily performance within a month reveals that the number of flights usually slip on 4th and 29th for both carriers and that ExpressJet’s flights peak on 28th. The monthly data shows that both carriers have their flight reaching a peak in July at 6174 and 6728 flights for Continental and ExpressJet respectively. The same data shows also that the trough for both carriers takes place in February and that, opposed to the general trend, Continental’s flights outpace ExpressJet’s ones during the last three month of the year.</p>
+
+										<h2>Conclusion2:</h2>
+										<p>The extracted data reveals that we have only two airports (George Bush Intercontinental/Houston Airport and William P. Hobby Airport) as departure points for all carriers in the dataset. The data also shows that Dallas Love Airport is the most visited destination in the weekend when it comes to Southwest airlines while Charlotte Douglas International Airport is the most visited destination in the weekend when it comes to Mesa Airlines. The data reveals in addition that the route from William P. Hobby Airport to Dallas Love Field Airport is the most active route during the weekend.</p>
+
+										<h2>Conclusion3:</h2>
+										<p>The seasonal insights shows that Dallas Love Field Airport is the most visited destination in autumn, winter and summer during the weekend while Hartsfield–Jackson Atlanta International Airport is the most visited destination in spring. The data also shows that Charlotte Douglas International Airport is the less visited destination in autumn and spring during the weekend. As for summer and winter, Newark Liberty International Airport and San Antonio International Airport are the less visited destinations respectively</p>
+
+										<h2>Conclusion4:</h2>
+										<p>The data shows that ExpressJet and Southwest have the highest numbers of cancelled flights and this result seems intuitive as these carriers have the highest number of flights. The data shows that JetBlue and AtlanticSoutheast have the highest average of departure and arrival delays while Mesa has the lwoest average of dealys.</p>
+
+
+
+
 
 																					
 
