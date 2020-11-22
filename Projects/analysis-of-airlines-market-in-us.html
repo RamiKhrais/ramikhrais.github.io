@@ -191,6 +191,213 @@
 										<p>It seems that <strong>ExpressJet</strong> along with <strong>Continental</strong> have the lion’s share of the number of flights. We can go much deeper now and examine the performance of both carriers within different time ranges</p>
 
 										<h2>How do ExpressJet and Continental perform daily within one week?</h2>
+
+										<pre><code>two_largest_daily <- hflights %>%
+											filter(DayOfWeek %in% c(1, 2, 3, 4, 5, 6, 7)) %>%
+											filter(Cancelled == 0) %>%
+											filter(Carrier %in% c("Continental", "ExpressJet")) %>%
+											group_by(Carrier, DayOfWeek) %>%
+											summarise(flights = n())
+										  
+										  two_largest_daily</code></pre>
+
+										  <pre><code>## # A tibble: 14 x 3
+											## # Groups:   Carrier [?]
+											##    Carrier     DayOfWeek flights
+											##    <chr>           <int>   <int>
+											##  1 Continental         1   10453
+											##  2 Continental         2    9418
+											##  3 Continental         3    9497
+											##  4 Continental         4   10522
+											##  5 Continental         5   10509
+											##  6 Continental         6    9061
+											##  7 Continental         7   10097
+											##  8 ExpressJet          1   11154
+											##  9 ExpressJet          2    9670
+											## 10 ExpressJet          3    9785
+											## 11 ExpressJet          4   11203
+											## 12 ExpressJet          5   11231
+											## 13 ExpressJet          6    8502
+											## 14 ExpressJet          7   10376</code></pre>
+
+											<pre><code>ggplot(two_largest_daily, aes(x= DayOfWeek, y= flights, col = Carrier)) + 
+												geom_line(size = 1.2) +
+												theme_minimal() +
+												geom_point(size = 3.2, shape = 21, fill = "white", stroke = 2.5) + 
+												scale_colour_manual(values = c("firebrick1", "goldenrod1")) +
+												scale_x_continuous(breaks = 1:7, labels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")) + 
+												theme(axis.text.x = element_text(colour = "black", size = 12, vjust = 0.6, angle = 60)) +
+												theme(axis.text.y = element_text(colour = "black", size = 12)) + 
+												theme(axis.title.x = element_blank()) +
+												ylab("Number of Flights") +
+												theme(axis.title.y = element_text(size = 14, margin = margin(r = 20))) +
+												theme(panel.grid.major.x = element_blank()) + 
+												theme(panel.grid.minor.x = element_blank()) +
+												theme(legend.position = "bottom") + 
+												theme(legend.title = element_blank()) + 
+												theme(legend.text = element_text(size = 12, colour = "black", face = "bold")) +
+												labs(title = "The Two Largest Players in the Market", subtitle = "Daily Flights in a Week") + 
+												theme(plot.title = element_text(size = 15))</code></pre>
+
+												<img src="../images/two-largest-players.png" alt="">
+
+												<h2>How do ExpressJet and Continental perform daily within one month?</h2>
+
+												<pre><code>two_largest_daily_month <- hflights %>%
+													filter(DayofMonth %in% c(1:30)) %>%
+													filter(Cancelled == 0) %>%
+													filter(Carrier %in% c("ExpressJet", "Continental")) %>%
+													group_by(Carrier, DayofMonth) %>%
+													summarise(flights = n())
+												  
+												  
+												  two_largest_daily_month <- as.data.frame(two_largest_daily_month)
+												  two_largest_daily_month</code></pre>
+
+												  <pre><code>##        Carrier DayofMonth flights
+													## 1  Continental          1    2249
+													## 2  Continental          2    2289
+													## 3  Continental          3    2254
+													## 4  Continental          4    2130
+													## 5  Continental          5    2268
+													## 6  Continental          6    2334
+													## 7  Continental          7    2329
+													## 8  Continental          8    2284
+													## 9  Continental          9    2287
+													## 10 Continental         10    2347
+													## 11 Continental         11    2299
+													## 12 Continental         12    2257
+													## 13 Continental         13    2313
+													## 14 Continental         14    2346
+													## 15 Continental         15    2299
+													## 16 Continental         16    2280
+													## 17 Continental         17    2332
+													## 18 Continental         18    2312
+													## 19 Continental         19    2222
+													## 20 Continental         20    2309
+													## 21 Continental         21    2339
+													## 22 Continental         22    2324
+													## 23 Continental         23    2303
+													## 24 Continental         24    2249
+													## 25 Continental         25    2276
+													## 26 Continental         26    2248
+													## 27 Continental         27    2307
+													## 28 Continental         28    2322
+													## 29 Continental         29    2063
+													## 30 Continental         30    2071
+													## 31  ExpressJet          1    2332
+													## 32  ExpressJet          2    2422
+													## 33  ExpressJet          3    2273
+													## 34  ExpressJet          4    2154
+													## 35  ExpressJet          5    2263
+													## 36  ExpressJet          6    2447
+													## 37  ExpressJet          7    2462
+													## 38  ExpressJet          8    2305
+													## 39  ExpressJet          9    2305
+													## 40  ExpressJet         10    2424
+													## 41  ExpressJet         11    2440
+													## 42  ExpressJet         12    2248
+													## 43  ExpressJet         13    2422
+													## 44  ExpressJet         14    2491
+													## 45  ExpressJet         15    2345
+													## 46  ExpressJet         16    2336
+													## 47  ExpressJet         17    2393
+													## 48  ExpressJet         18    2429
+													## 49  ExpressJet         19    2304
+													## 50  ExpressJet         20    2465
+													## 51  ExpressJet         21    2466
+													## 52  ExpressJet         22    2339
+													## 53  ExpressJet         23    2357
+													## 54  ExpressJet         24    2304
+													## 55  ExpressJet         25    2331
+													## 56  ExpressJet         26    2352
+													## 57  ExpressJet         27    2499
+													## 58  ExpressJet         28    2530
+													## 59  ExpressJet         29    2033
+													## 60  ExpressJet         30    2094</code></pre>
+
+													<pre><code>ggplot(two_largest_daily_month, aes(x= DayofMonth, y= flights, col= Carrier)) +
+														geom_line(size = 1.2) +
+														geom_point(size = 3.2, shape = 21, fill = "white", stroke = 2.5) +
+														theme_minimal() + 
+														scale_colour_manual(values = c("firebrick1", "goldenrod1")) + 
+														scale_x_continuous(breaks = 1:30, limits = c(0, 30)) + 
+														scale_y_continuous(limits = c(2000, 2600), breaks = c(2000, 2100, 2200, 2300, 2400, 2500, 2600), labels = scales :: comma) +
+														ylab("Number of Flights") +
+														theme(panel.grid.major.x = element_blank()) + 
+														theme(panel.grid.minor.x = element_blank()) +
+														theme(axis.text.x = element_text(size = 10, colour = "black")) +
+														theme(axis.text.y = element_text(size = 10, colour = "black")) +
+														theme(axis.title.x = element_blank()) +
+														theme(axis.title.y = element_text(size= 14, margin = margin(r =20))) + 
+														theme(legend.position = "bottom") + 
+														theme(legend.title = element_blank()) + 
+														theme(legend.text = element_text(size = 12, face = "bold", colour = "black")) +
+														labs(title = "The Two Largest Players in the Market", subtitle = "Daily Flights in a Month") + 
+														theme(plot.title = element_text(size = 15))</code></pre>
+
+														<img src="../images/two-largest-players-m.png" alt="">
+
+														<h2>How do ExpressJet and Continental perform monthly?</h2>
+
+														<pre><code>two_largest_monthly <- hflights %>%
+															filter(Month %in% c(1:12)) %>%
+															filter(Cancelled == 0) %>%
+															filter(Carrier %in% c("ExpressJet", "Continental")) %>%
+															group_by(Carrier, Month) %>%
+															summarise(flights = n())
+															  
+															  
+														  two_largest_monthly <- as.data.frame(two_largest_monthly)
+														  two_largest_monthly</code></pre>
+
+														  <pre><code>##        Carrier Month flights
+															## 1  Continental     1    6010
+															## 2  Continental     2    5181
+															## 3  Continental     3    6024
+															## 4  Continental     4    5513
+															## 5  Continental     5    5824
+															## 6  Continental     6    6025
+															## 7  Continental     7    6174
+															## 8  Continental     8    5962
+															## 9  Continental     9    5451
+															## 10 Continental    10    5901
+															## 11 Continental    11    5691
+															## 12 Continental    12    5801
+															## 13  ExpressJet     1    6727
+															## 14  ExpressJet     2    5348
+															## 15  ExpressJet     3    6321
+															## 16  ExpressJet     4    5976
+															## 17  ExpressJet     5    5985
+															## 18  ExpressJet     6    6045
+															## 19  ExpressJet     7    6728
+															## 20  ExpressJet     8    6606
+															## 21  ExpressJet     9    5590
+															## 22  ExpressJet    10    5514
+															## 23  ExpressJet    11    5309
+															## 24  ExpressJet    12    5772</code></pre>
+														
+														<pre><code>ggplot(two_largest_monthly, aes(x= Month, y= flights, col = Carrier)) +
+															geom_line(size = 1.2) +
+															geom_point(size = 3.2, shape = 21, fill = "white", stroke = 2.5) +
+															theme_minimal() +
+															ylab("Number of Flights") +
+															scale_y_continuous(breaks = seq(5000, 7000, 300)) +
+															scale_x_continuous(breaks = 1:12, labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")) +
+															theme(axis.text.x = element_text(size = 12, colour = "black")) +
+															theme(axis.text.y = element_text(size = 12, colour = "black")) +
+															theme(axis.title.x = element_blank()) +
+															theme(panel.grid.major.x = element_blank()) +
+															theme(panel.grid.minor.x = element_blank()) + 
+															scale_colour_manual(values = c("firebrick1", "goldenrod1")) +
+															theme(axis.title.y = element_text(size = 14, margin = margin(r=20))) +
+															theme(legend.position = "bottom") +
+															theme(legend.text = element_text(size= 12, face = "bold", colour= "black")) + 
+															theme(legend.title = element_blank()) +
+															labs(title = "The Largest Players in the Market", subtitle = "Monthly Flights") +
+															theme(plot.title = element_text(size = 15, colour = "black"))</code></pre>
+
+														<img src="../images/two-largest-players-mm.png" alt="">
 								
 
 
