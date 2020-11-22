@@ -108,10 +108,9 @@
 										"WN" = "Southwest", "EV" = "Atlantic_Southeast", "F9" = "Frontier", 
 										"FL" = "AirTran", "MQ" = "American_Eagle", "XE" = "ExpressJet", "YV" = "Mesa")
 							   
+							             hflights$Carrier <- lut[hflights$UniqueCarrier]
 							   
-							   hflights$Carrier <- lut[hflights$UniqueCarrier]
-							   
-							   glimpse(hflights)
+							             glimpse(hflights)
 										
 									</code></pre>
 
