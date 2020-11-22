@@ -398,6 +398,108 @@
 															theme(plot.title = element_text(size = 15, colour = "black"))</code></pre>
 
 														<img src="../images/two-largest-players-mm.png" alt="">
+
+														<h2>More Insights Ahead</h2>
+														<p>Everthing looks good so far. Let’s try now to get some spatial insights by aaking: <h2>What is the most active departure airport for each carrier in the weekend?</h2></p>
+
+														<pre><code>Origin_carr <- hflights %>%
+															filter(DayOfWeek %in% c(6, 7)) %>%
+															group_by(Carrier, Origin) %>%
+															summarise(flights = n()) %>%
+															mutate(rank = rank(desc(flights))) %>%
+															filter(rank == 1) %>%
+															arrange(desc(flights))
+														  
+														  Origin_carr</code></pre>
+
+														  <pre><code>## # A tibble: 15 x 4
+															## # Groups:   Carrier [15]
+															##    Carrier            Origin flights  rank
+															##    <chr>              <chr>    <int> <dbl>
+															##  1 Continental        IAH      19250     1
+															##  2 ExpressJet         IAH      19136     1
+															##  3 Southwest          HOU      10792     1
+															##  4 SkyWest            IAH       4380     1
+															##  5 US_Airways         IAH       1119     1
+															##  6 American           IAH        896     1
+															##  7 American_Eagle     IAH        605     1
+															##  8 Delta              IAH        596     1
+															##  9 United             IAH        589     1
+															## 10 AirTran            HOU        527     1
+															## 11 Atlantic_Southeast IAH        437     1
+															## 12 Frontier           HOU        203     1
+															## 13 JetBlue            HOU        188     1
+															## 14 Alaska             IAH        105     1
+															## 15 Mesa               IAH         39     1</code></pre>
+
+															<h2>What is the most visited destination for each carrier in the weekend?</h2>
+
+															<pre><code>Dest_carr <- hflights %>% 
+																filter(DayOfWeek %in% c(6, 7)) %>%
+																group_by(Carrier, Dest) %>%
+																summarise(flights = n()) %>%
+																mutate(rank = rank(desc(flights))) %>%
+																filter(rank == 1) %>%
+																arrange(desc(flights))
+															  
+															  Dest_carr</code></pre>
+
+															  <pre><code>## # A tibble: 15 x 4
+																## # Groups:   Carrier [15]
+																##    Carrier            Dest  flights  rank
+																##    <chr>              <chr>   <int> <dbl>
+																##  1 Southwest          DAL      1786     1
+																##  2 Continental        EWR      1117     1
+																##  3 ExpressJet         CRP       822     1
+																##  4 Delta              ATL       633     1
+																##  5 US_Airways         CLT       598     1
+																##  6 American_Eagle     DFW       593     1
+																##  7 American           DFW       569     1
+																##  8 AirTran            ATL       472     1
+																##  9 SkyWest            COS       393     1
+																## 10 Frontier           DEN       203     1
+																## 11 Atlantic_Southeast DTW       201     1
+																## 12 United             SFO       197     1
+																## 13 JetBlue            JFK       188     1
+																## 14 Alaska             SEA       105     1
+																## 15 Mesa               CLT        31     1</code></pre>
+
+																<h2>What are the most active airline routes in the weekend?</h2>
+
+																<pre><code>Airline_route <- hflights %>%
+																	filter(DayOfWeek %in% c(6, 7)) %>%
+																	group_by(Origin, Dest) %>%
+																	summarise(flights = n()) %>%
+																	arrange(desc((flights))) %>%
+																	mutate(rank = rank(desc(flights))) %>%
+																	filter(rank %in% c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
+																  
+																  Airline_route</code></pre>
+
+																  <pre><code>## # A tibble: 20 x 4
+																	## # Groups:   Origin [2]
+																	##    Origin Dest  flights  rank
+																	##    <chr>  <chr>   <int> <dbl>
+																	##  1 HOU    DAL      1786     1
+																	##  2 IAH    ORD      1608     1
+																	##  3 IAH    LAX      1311     2
+																	##  4 IAH    ATL      1292     3
+																	##  5 IAH    CLT      1254     4
+																	##  6 IAH    DFW      1155     5
+																	##  7 IAH    EWR      1117     6
+																	##  8 IAH    PHX      1041     7
+																	##  9 IAH    DEN      1026     8
+																	## 10 IAH    MSY       912     9
+																	## 11 IAH    AUS       865    10
+																	## 12 HOU    MSY       778     2
+																	## 13 HOU    ATL       704     3
+																	## 14 HOU    DEN       606     4
+																	## 15 HOU    DFW       593     5
+																	## 16 HOU    HRL       529     6
+																	## 17 HOU    MDW       505     7
+																	## 18 HOU    MCO       426     8
+																	## 19 HOU    LAS       396     9
+																	## 20 HOU    SAT       393    10</code></pre>
 								
 
 
