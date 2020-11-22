@@ -58,9 +58,23 @@
 								<p>Data Overview
 									The data that will be used in this analysis is extracted from built-in R dataset <strong>hflights</strong>. The dataset consists of 21 variables and 227,496 observations and it covers the activity of 15 carriers in United States in 2011.</p>
 
-									<h1>What is next?</h1>
+									<h2>What is next?</h1>
 
 									<p>What I’m going to do is to imagine myself as an analyst who works in a market research consultancy. I have been requested by my manager to extract some useful insights from the dataset. I have also been asked to visualize the resulted insights in a nice and precise way so the manager can draw few conclusions about the main trends in the market.</p>
+
+									<h2>Packages used in the analysis</h2>
+
+									<pre><code>library(hflights) 
+										library(ggplot2) 
+										library(dplyr)
+										library(ggthemes)
+										library(scales)
+										library(gridExtra)
+									</code></pre>
+
+									<p>Let’s first have a look at our dataset.</p>
+
+									<pre><code>glimpse(hflight)</code></pre>
 
 
 
