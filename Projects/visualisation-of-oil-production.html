@@ -1,0 +1,504 @@
+<!DOCTYPE HTML>
+<!--
+	Massively by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Analysis of Airlines Market in US</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		<link rel="stylesheet" href="../assets/css/obsidian.css">
+		<noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo">Portfolio</a>
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<!-- <ul class="links">
+							<li><a href="index.html">This is Massively</a></li>
+							<li class="active"><a href="generic.html">Generic Page</a></li>
+							<li><a href="elements.html">Elements Reference</a></li>
+						</ul> -->
+						<!-- <ul class="icons">
+							<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+							<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+							<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+							<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+						</ul> -->
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Post -->
+							<section class="post">
+								<header class="major">
+									<span class="date">November 20, 2020</span>
+									<h1>This is a<br />
+									Generic Page</h1>
+									<p>Aenean ornare velit lacus varius enim ullamcorper proin aliquam<br />
+									facilisis ante sed etiam magna interdum congue. Lorem ipsum dolor<br />
+									amet nullam sed etiam veroeros.</p>
+								</header>
+                                <div class="image main"><img src="images/pic01.jpg" alt="" /></div>
+                                
+                                <h2>Overview</h2>
+
+                                <p>I’m going to visualise some charts for oil production and reserves for few countries. The data used in the coming charts is mainly extracted from BP Statistical Review of World Energy 2018 (Though first two charts were based on OPEC data). When it comes to BP Review, oil production refers to a relateively broad category including crude oil, shale oil, oil sand and natrual gas liquids (NGLs). The aim of this report is to show some of the most popular charts used in the field and some of their customizations.</p>
+
+                                <h2>Packages used in data cleaning and visualisation</h2>
+
+                                <pre><code>library(ggplot2)
+                                    library(ggthemes)
+                                    library(dplyr)
+                                    library(scales)
+                                    library(ggthemes)
+                                    library(readxl)
+                                    library(tidyr)</code></pre>
+
+                                <h2>Bar Chart</h2>
+
+                                <pre><code>oil_reserves <- read_excel("C:/Users/Rami/Desktop/reserves.xlsx")
+                                    head(oil_reserves)</code></pre>
+
+                                <pre><code>## # A tibble: 5 x 3
+                                    ##   Country      Reserves   Cnt
+                                    ##   <chr>           <dbl> <dbl>
+                                    ## 1 Venezuela         303  31.1
+                                    ## 2 Saudi Arabia      266  27.4
+                                    ## 3 Iran              156  16  
+                                    ## 4 Iraq              147  15.1
+                                    ## 5 Kuwait            102  10.4</code></pre>
+
+                                <p>As we want the chart to show the production levels in ascending levels, we should manipultae the data a little bit.</p>
+
+                                <pre><code>oil_reserves$Country <- factor(oil_reserves$Country, levels = rev(as.character(oil_reserves$Country)))
+
+                                    ggplot(oil_reserves, aes(x= reorder(Country, Reserves), y= Reserves, fill = Country)) +
+                                      theme_minimal() + 
+                                      geom_bar(stat = "identity", width = 0.8) + 
+                                      scale_y_continuous(limits = c(0, 320), breaks = c(0, 40, 80, 120, 160, 200, 240, 280, 320), labels = scales::comma) +
+                                      scale_fill_manual(values= c("#000B29", "#D70026", "azure4", "#EDB83D", "coral")) + 
+                                      theme(axis.title.x = element_blank()) + 
+                                      theme(axis.title.y = element_blank()) +
+                                      theme(axis.text.x = element_text(size = 12, face = "bold", colour = "black")) +
+                                      ylab("Proven Crude Oil Reserves") + 
+                                      theme(panel.grid.major.x = element_blank()) + 
+                                      theme(panel.grid.minor.x = element_blank()) + 
+                                      theme(legend.position = "none") + 
+                                      labs(title = "Five OPEC Countries with the Biggest Oil Reserves", subtitle = " Billion Barrels", caption = "Source: OPEC") +
+                                      theme(title = element_text(size = 14))</code></pre>
+
+                                <img src="../images/opec-five-biggest.png" alt="">
+
+                                <h2>Pie Chart</h2>
+
+                                <pre><code>oil_reserves$Country <- factor(oil_reserves$Country, levels = rev(as.character(oil_reserves$Country)))
+
+                                    ggplot(oil_reserves, aes(x = "", y = Cnt, fill = Country)) + 
+                                      coord_polar("y") + theme_classic() + 
+                                      geom_bar(width = 2.5, size = 2, colour = "white", stat = "identity") +
+                                      theme(axis.line.x = element_blank()) + 
+                                      theme(axis.line.y = element_blank()) + 
+                                      theme(axis.title.x = element_blank()) + 
+                                      labs(x = NULL, Y = NULL) +
+                                      theme(axis.text = element_blank()) + 
+                                      scale_fill_manual(values = c("#000B29", "#D70026", "azure4", "#EDB83D", "coral")) + 
+                                      guides(fill = guide_legend(reverse = TRUE)) + 
+                                      geom_text(aes(label = paste0(round(Cnt), "%")), position = position_stack(vjust = 0.5), color = "white") + 
+                                      labs(title = "Five Opec Countries with the Biggest Oil Reserves", caption = "Source = OPEC") +
+                                      theme(title = element_text(size = 14)) + 
+                                      theme(legend.text = element_text(size = 14)) + 
+                                      theme(legend.title = element_blank()) + 
+                                      theme(legend.position = "bottom") + 
+                                      theme(plot.title = element_text(hjust = 0.5))</code></pre>
+
+                                <img src="../images/opec-five.png" alt="">
+
+                                <h2>Importing and Cleaning BP Data for Oil Production</h2>
+
+                                <pre><code>bp <- read_excel("C:/Users/Rami/Desktop/BPStats.xlsx", sheet = 6, skip = 2)
+                                    glimpse(bp</code></pre>
+
+                                <pre><code>## Observations: 86
+                                    ## Variables: 57
+                                    ## $ `Thousand barrels daily` <chr> NA, "US", "Canada", "Mexico", "Total ...
+                                    ## $ `1965`                   <chr> NA, "9014.148000000001", "920", "362"...
+                                    ## $ `1966`                   <chr> NA, "9579.241", "1012", "370", "10961...
+                                    ## $ `1967`                   <chr> NA, "10219.252", "1106", "411", "1173...
+                                    ## $ `1968`                   <chr> NA, "10599.743", "1194", "439", "1223...
+                                    ## $ `1969`                   <chr> NA, "10827.674000000001", "1306", "46...
+                                    ## $ `1970`                   <chr> NA, "11296.849", "1473", "487", "1325...
+                                    ## $ `1971`                   <chr> NA, "11155.778", "1582", "486", "1322...
+                                    ## $ `1972`                   <chr> NA, "11184.896000000001", "1829", "50...
+                                    ## $ `1973`                   <chr> NA, "10945.953", "2114", "525", "1358...
+                                    ## $ `1974`                   <chr> NA, "10461.205", "1993", "653", "1310...
+                                    ## $ `1975`                   <chr> NA, "10007.736999999999", "1735", "80...
+                                    ## $ `1976`                   <chr> NA, "9735.6389999999992", "1598", "89...
+                                    ## $ `1977`                   <chr> NA, "9862.5619999999999", "1608", "10...
+                                    ## $ `1978`                   <chr> NA, "10274.441000000001", "1597", "13...
+                                    ## $ `1979`                   <chr> NA, "10135.534", "1835", "1607", "135...
+                                    ## $ `1980`                   <chr> NA, "10169.626", "1764", "2129", "140...
+                                    ## $ `1981`                   <chr> NA, "10180.573", "1610", "2553", "143...
+                                    ## $ `1982`                   <chr> NA, "10198.534", "1590", "3001", "147...
+                                    ## $ `1983`                   <chr> NA, "10246.668", "1661", "2930", "148...
+                                    ## $ `1984`                   <chr> NA, "10508.950999999999", "1775", "29...
+                                    ## $ `1985`                   <chr> NA, "10580.378000000001", "1812.79521...
+                                    ## $ `1986`                   <chr> NA, "10231.142", "1805.1174616419273"...
+                                    ## $ `1987`                   <chr> NA, "9943.9779999999992", "1908.76994...
+                                    ## $ `1988`                   <chr> NA, "9764.6890000000003", "2002.41851...
+                                    ## $ `1989`                   <chr> NA, "9159.0770000000011", "1961.45622...
+                                    ## $ `1990`                   <chr> NA, "8914.3070000000007", "1967.73567...
+                                    ## $ `1991`                   <chr> NA, "9075.5450000000001", "1983.50534...
+                                    ## $ `1992`                   <chr> NA, "8868.125", "2065.5790598282069",...
+                                    ## $ `1993`                   <chr> NA, "8582.6650000000009", "2189.01030...
+                                    ## $ `1994`                   <chr> NA, "8388.5789999999997", "2281.33478...
+                                    ## $ `1995`                   <chr> NA, "8321.6389999999992", "2402.12781...
+                                    ## $ `1996`                   <chr> NA, "8294.527", "2479.9174236024764",...
+                                    ## $ `1997`                   <chr> NA, "8268.5920000000006", "2587.59028...
+                                    ## $ `1998`                   <chr> NA, "8010.8329999999996", "2672.38133...
+                                    ## $ `1999`                   <chr> NA, "7731.4579999999996", "2604.39959...
+                                    ## $ `2000`                   <chr> NA, "7731.6040000000003", "2703.40190...
+                                    ## $ `2001`                   <chr> NA, "7669.4009999999998", "2727.95812...
+                                    ## $ `2002`                   <chr> NA, "7625.0780000000004", "2858.16410...
+                                    ## $ `2003`                   <chr> NA, "7367.3", "3003.4707919793873", "...
+                                    ## $ `2004`                   <chr> NA, "7249.9949999999999", "3079.88144...
+                                    ## $ `2005`                   <chr> NA, "6899.8220000000001", "3040.89602...
+                                    ## $ `2006`                   <chr> NA, "6824.8639999999996", "3208.38420...
+                                    ## $ `2007`                   <chr> NA, "6859.6859999999997", "3290.18966...
+                                    ## $ `2008`                   <chr> NA, "6783.9579999999996", "3207.03529...
+                                    ## $ `2009`                   <chr> NA, "7263.0339999999997", "3202.39768...
+                                    ## $ `2010`                   <chr> NA, "7549.1880000000001", "3332.07980...
+                                    ## $ `2011`                   <chr> NA, "7858.8490000000002", "3514.82206...
+                                    ## $ `2012`                   <chr> NA, "8903.6180000000004", "3740.23767...
+                                    ## $ `2013`                   <chr> NA, "10071.217000000001", "4000.41096...
+                                    ## $ `2014`                   <chr> NA, "11768.192999999999", "4270.52990...
+                                    ## $ `2015`                   <chr> NA, "12750.268", "4389.1402241510259"...
+                                    ## $ `2016`                   <chr> NA, "12365.806", "4470.176332139712",...
+                                    ## $ `2017`                   <chr> NA, "13056.993", "4830.6284506991078"...
+                                    ## $ `2017__1`                <chr> NA, "5.5895022127955052E-2", "8.06348...
+                                    ## $ `2006-16`                <chr> NA, "6.1238122797292904E-2", "3.37221...
+                                    ## $ `2017__2`                <chr> NA, "0.14093023232708649", "5.2139232...</code></pre>
+
+                                <p>The data looks a bit dirty. Let’s do some cleaning here.</p>
+
+                                <pre><code>#Changing the column name of “Thousand Barrels”
+
+                                    colnames(bp)[1] <- "Country" 
+                                    
+                                    #Removing the last three redundant columns
+                                    
+                                    bp_clean1 <- bp[1:(length(bp)-3)]
+                                    
+                                    #Removing na values form the data
+                                    
+                                    bp_clean2 <- na.omit(bp_clean1)
+                                    
+                                    #Rearranging the data
+                                    
+                                    bp_clean3 <- gather(bp_clean2, Year, Production, -Country, na.rm = TRUE) 
+                                    
+                                    #Changing the prodution into integer
+                                    
+                                    bp_clean3$Production <- as.integer(bp_clean3$Production)
+                                    
+                                    #Replacing n/a values with zeros
+                                    
+                                    bp_clean3$Production[is.na(bp_clean3$Production)] <- 0 
+                                    
+                                    #Removing redundant rows from the dataset
+                                    
+                                    remove.list <- paste(c("Other Africa", "Total World", "European Union #", "Other Asia Pacific", "Total Asia Pacific", "of which: OECD",
+                                                     "Total Europe", "Total Africa", "OPEC", "Non-OPEC", "Other Europe", "Total North America", "Total CIS", 
+                                                     "Non-OECD", "OECD", "Total Middle East", "Other Middle East", "Other CIS", "Other S. & Cent. America", 
+                                                     "Total S. & Cent. America"))
+                                    
+                                    bp_clean4 <- subset(bp_clean3, ! Country %in% remove.list)</code></pre>
+
+                                <p>Let’s have a look at our data right now.</p>
+
+                                <pre><code>head(bp_clean4)</code></pre>
+
+                                <pre><code>## # A tibble: 6 x 3
+                                    ##   Country   Year  Production
+                                    ##   <chr>     <chr>      <dbl>
+                                    ## 1 US        1965        9014
+                                    ## 2 Canada    1965         920
+                                    ## 3 Mexico    1965         362
+                                    ## 4 Argentina 1965         275
+                                    ## 5 Brazil    1965          96
+                                    ## 6 Colombia  1965         203</code></pre>
+
+                                <h2>Line Chart</h2>
+
+                                <pre><code>Opec_five_prodcution <- bp_clean4 %>%
+                                    filter(Country %in% c("Venezuela", "Saudi Arabia", "Iran", "Iraq", "Kuwait")) %>%
+                                    filter(Year %in% c(1997:2017)) %>%
+                                    group_by(Country, Production) %>%
+                                    arrange((desc(Production))) 
+                                  
+                                  head(Opec_five_prodcution)</code></pre>
+
+                                <pre><code>## # A tibble: 6 x 3
+                                    ## # Groups:   Country, Production [6]
+                                    ##   Country      Year  Production
+                                    ##   <chr>        <chr>      <dbl>
+                                    ## 1 Saudi Arabia 2016       12401
+                                    ## 2 Saudi Arabia 2015       11994
+                                    ## 3 Saudi Arabia 2017       11950
+                                    ## 4 Saudi Arabia 2012       11634
+                                    ## 5 Saudi Arabia 2014       11504
+                                    ## 6 Saudi Arabia 2013       11393</code></pre>
+
+                                <pre><code>Opec_five_prodcution$Country <- factor(Opec_five_prodcution$Country, levels = c("Saudi Arabia", "Iran", "Iraq", "Venezuela", "Kuwait"))
+
+
+                                    plot_line <- ggplot(Opec_five_prodcution, aes(x = Year, y = Production, fill = Country)) +
+                                      geom_line(size = 2, aes(group = Country, colour = Country)) + 
+                                      scale_color_manual(values = c("#000B29", "#D70026", "azure4", "#EDB83D", "coral")) +
+                                      theme_minimal() + 
+                                      scale_y_continuous(limits = c(1000, 13000), breaks = c(1000, 4000, 7000, 10000, 13000), labels = scales::comma) + 
+                                      scale_x_discrete(breaks = seq(1997,2017,5)) + 
+                                      theme(axis.title.x = element_blank()) + 
+                                      theme(axis.text.x = element_text(size = 12, colour = "black")) + 
+                                      theme(axis.title.y = element_blank()) + 
+                                      theme(axis.text.y = element_text(size = 10, colour = "black")) + 
+                                      theme(legend.title = element_blank()) + 
+                                      theme(panel.grid.major.x = element_blank()) + 
+                                      theme(panel.grid.minor.x = element_blank()) +
+                                      theme(legend.position = "bottom") + 
+                                      theme(legend.key.size = unit(2, "lines")) +
+                                      theme(legend.text = element_text(colour = "black", size = 12, face = "bold")) + 
+                                      labs(title = "Oil Production of Five of OPEC Countries", subtitle = "Thousand Barrels Daily",
+                                           caption = "Source: BP Statistical Review") +
+                                      theme(title = element_text(size = 14))
+                                    
+                                    plot_lin</code></pre>
+
+                                <img src="../images/five-opec-oil-production.png" alt="">
+
+                                <h2>Area Chart</h2>
+
+                                <pre><code>ggplot(data = Opec_five_prodcution, aes(x=Year, y=Production, fill = Country, group = Country)) + 
+                                    geom_area(aes(fill = Country), stat= "identity") + 
+                                    scale_fill_manual(values = c("#000B29", "#D70026", "azure4", "#EDB83D", "coral")) + 
+                                    theme_minimal() +
+                                    scale_y_continuous(limits = c(0, 30000), breaks = c(0, 6000, 12000, 18000, 24000, 30000), labels = scales::comma) + 
+                                    scale_x_discrete(breaks = seq(1997,2017,5)) + 
+                                    theme(axis.title.x = element_blank()) + 
+                                    theme(axis.text.x = element_text(size = 12, colour = "black")) + 
+                                    theme(axis.title.y = element_blank()) + 
+                                    theme(axis.text.y = element_text(size = 10, colour = "black")) + 
+                                    theme(legend.title = element_blank()) + 
+                                    theme(panel.grid.major.x = element_blank()) + 
+                                    theme(panel.grid.minor.x = element_blank()) +
+                                    theme(legend.position = "bottom") + 
+                                    theme(legend.key.width = unit(3, "lines")) +
+                                    theme(legend.key.height = unit(0.4, "lines")) + 
+                                    theme(legend.text = element_text(colour = "black", size = 12, face = "bold")) + 
+                                    labs(title = "Oil Production of Five of OPEC Countries", subtitle = "Thousand Barrels Daily",
+                                         caption = "Source: BP Statistical Review") +
+                                    theme(title = element_text(size = 14))</code></pre>
+
+                                <img src="../images/opec-five-area-chart.png" alt="">
+
+                                <h2>Bar Chart(Labeled Ends)</h2>
+
+                                <pre><code>bp_clean4 <- as.data.frame(bp_clean4)
+
+                                    bp_clean4$Production <- as.numeric(bp_clean4$Production)
+                                    
+                                    
+                                    top_ten <- bp_clean4 %>%
+                                      filter(Year == "2017") %>%
+                                      arrange(desc(Production)) %>%
+                                      slice(1:15)</code></pre>
+
+                                <pre><code>highest <- c("two", rep("one", 14))
+
+                                    ggplot(top_ten, aes(x = reorder(Country, Production), y = Production)) + 
+                                      geom_bar(stat = "identity", aes(fill = highest)) + 
+                                      scale_fill_manual(values = c("#813753","#54203F")) + coord_flip() +
+                                      geom_text(aes(y= Production, x = seq(15,1), label = paste0(round(Production),"")), nudge_y = 750, color="black", size = 4) + 
+                                      theme_minimal() +
+                                      theme(axis.title.x = element_blank(),
+                                            axis.title.y = element_blank(),
+                                            axis.text.x = element_blank(),
+                                            axis.text.y = element_text(size = 12, colour = "black"),
+                                            legend.position = "None",
+                                            panel.background = element_blank(),
+                                            panel.grid = element_blank()) + 
+                                      labs(title = "Top Fifteen Oil Producing Countries in the World in 2017", subtitle = "Thousand Barrels Daily", 
+                                          caption = "Source: BP Statistical Review") + 
+                                      theme(title = element_text(size = 12))</code></pre>
+
+                                <img src="../images/top-15-producers.png" alt="">
+
+
+                                <h2>Stacked Bars</h2>
+
+                                <pre><code>top_three <- bp_clean4 %>%
+                                    filter(Year %in% c(2012:2017) & Country %in% c("US", "Russian Federation", "Saudi Arabia")) %>%
+                                    arrange(desc(Production))
+                                  
+                                  ggplot(top_three, aes(x= Year, y = Production, fill = Country)) +
+                                    geom_bar(stat = "identity") + 
+                                    theme_minimal() +
+                                    scale_fill_manual(values = c("#003B46", "#07575B", "#66A5AD")) +
+                                    scale_y_continuous(limits = c(0,40000), breaks = c(0, 10000, 20000, 30000, 40000), labels = scales::comma) + 
+                                    theme(axis.title.x = element_blank(),
+                                          panel.grid.major.x = element_blank(),
+                                          panel.grid.minor.x = element_blank(),
+                                          legend.title = element_blank(),
+                                          axis.text.y = element_text(size = 12, colour = "black"),
+                                          axis.title.y = element_blank(),
+                                          axis.text.x = element_text(size = 12, colour = "black"),
+                                          legend.position = "bottom", 
+                                          legend.key.height = unit(0.8, "lines"), 
+                                          legend.key.width = unit(3, "lines"),
+                                          legend.text = element_text(size = 12, colour = "black", face = "bold")) + 
+                                    labs(title= "Top Three Oil Producing Countries in the World (2012-2017)", subtitle = "Thousand Barrels Daily", 
+                                         caption = "Source: BP Statistical Review") +
+                                    theme(title = element_text(size = 12))</code></pre>
+
+                                <img src="../images/top-three-producers.png" alt="">
+
+                                <h2>Clustered Bars</h2>
+
+                                <pre><code>top_five <- bp_clean4 %>%
+                                    filter(Year %in% c(2012:2017) & Country %in% c("US", "Russian Federation", "Saudi Arabia", "Iran", "Canada")) %>%
+                                    arrange(desc(Production))
+                                  
+                                  ggplot(top_five, aes(x= Year, y = Production, fill = Country)) +
+                                    geom_bar(stat = "identity", position = "dodge") + 
+                                    theme_minimal() +
+                                    scale_fill_manual(values = c("#375E97", "#FB6542", "#FFBB00", "#3F681C", "#98DBC6")) +
+                                    scale_y_continuous(limits = c(0,20000), breaks = c(0, 4000, 8000, 12000, 16000, 20000), labels = scales::comma) + 
+                                    theme(axis.title.x = element_blank(),
+                                          panel.grid.major.x = element_blank(),
+                                          panel.grid.minor.x = element_blank(),
+                                          legend.title = element_blank(),
+                                          axis.text.y = element_text(size = 12, colour = "black"),
+                                          axis.text.x = element_text(size = 12, colour = "black"),
+                                          axis.title.y = element_blank(), 
+                                          legend.position = "bottom", 
+                                          legend.key.height = unit(0.8, "lines"), 
+                                          legend.key.width = unit(0.8, "lines"),
+                                          legend.text = element_text(size = 12, colour = "black", face = "bold")) + 
+                                    labs(title= "Top Five Oil Producing Countries (2012-2017)", subtitle = "Thousand Barrels Daily", 
+                                         caption = "Source: BP Statistical Review") +
+                                    theme(title = element_text(size = 14))</code></pre>
+
+
+                                <img src="../images/top-5-producers.png" alt="">
+
+                                <h2>Bar Chart (Overlaid Line)</h2>
+
+                                <pre><code>us_production <- bp_clean4 %>%
+                                    filter(Year %in% c(1997:2017) & Country == "US") %>%
+                                    arrange(Year)
+                                  
+                                  
+                                  ggplot(us_production, aes(x= Year, y = Production)) + 
+                                    geom_bar(size = 1.5, width = 0.5, fill = "gold", stat = "identity") + 
+                                    geom_line(aes(group = 1), size = 1, color = "orangered3") + 
+                                    geom_point(size = 7, shape = 21, fill = "orangered3") +
+                                    theme_minimal() + 
+                                    scale_y_continuous(limits = c(0,14000), breaks = c(0, 2000, 4000, 6000, 8000, 10000, 12000, 14000), labels = scales::comma) +
+                                    theme(axis.title.x = element_blank(),
+                                          panel.grid.major.x = element_blank(),
+                                          panel.grid.minor.x = element_blank(),
+                                          legend.title = element_blank(),
+                                          axis.text.y = element_text(size = 10, colour = "black"),
+                                          axis.text.x = element_text(size = 10, colour = "black", angle = 65, vjust = 0.6),
+                                          axis.title.y = element_blank()) +
+                                    labs(title= "US Oil Production (1997-2017)", subtitle = "Thousand Barrels Daily", 
+                                         caption = "Source: BP Statistical Review") +
+                                    theme(title = element_text(size = 14))</code></pre>
+
+                                <img src="../images/us-oil-production.png" alt="">
+
+							</section>
+
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<!-- <section>
+							<form method="post" action="#">
+								<div class="fields">
+									<div class="field">
+										<label for="name">Name</label>
+										<input type="text" name="name" id="name" />
+									</div>
+									<div class="field">
+										<label for="email">Email</label>
+										<input type="text" name="email" id="email" />
+									</div>
+									<div class="field">
+										<label for="message">Message</label>
+										<textarea name="message" id="message" rows="3"></textarea>
+									</div>
+								</div>
+								<ul class="actions">
+									<li><input type="submit" value="Send Message" /></li>
+								</ul>
+							</form>
+						</section>
+						<section class="split contact">
+							<section class="alt">
+								<h3>Address</h3>
+								<p>1234 Somewhere Road #87257<br />
+								Nashville, TN 00000-0000</p>
+							</section>
+							<section>
+								<h3>Phone</h3>
+								<p><a href="#">(000) 000-0000</a></p>
+							</section>
+							<section>
+								<h3>Email</h3>
+								<p><a href="#">info@untitled.tld</a></p>
+							</section>
+							<section>
+								<h3>Social</h3>
+								<ul class="icons alt">
+									<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
+									<li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
+									<li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
+									<li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+								</ul>
+							</section>
+						</section> -->
+					</footer>
+
+				<!-- Copyright -->
+					<div id="copyright">
+						<ul><li>&copy; Untitled</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li></ul>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="../assets/js/jquery.scrollex.min.js"></script>
+			<script src="../assets/js/jquery.scrolly.min.js"></script>
+			<script src="../assets/js/browser.min.js"></script>
+			<script src="../assets/js/breakpoints.min.js"></script>
+			<script src="../assets/js/util.js"></script>
+			<script src="../assets/js/main.js"></script>
+			<script src="../assets/js/highlight.pack.js"></script>
+			<script>hljs.initHighlightingOnLoad();</script>
+
+	</body>
+</html>
