@@ -1,0 +1,596 @@
+<!DOCTYPE HTML>
+<!--
+	Massively by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Analysis of Airlines Market in US</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		<link rel="stylesheet" href="..//assets/css/obsidian.css">
+		<noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo">Portfolio</a>
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<!-- <ul class="links">
+							<li><a href="index.html">This is Massively</a></li>
+							<li class="active"><a href="generic.html">Generic Page</a></li>
+							<li><a href="elements.html">Elements Reference</a></li>
+						</ul> -->
+						<!-- <ul class="icons">
+							<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+							<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+							<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+							<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+						</ul> -->
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Post -->
+							<section class="post">
+								<header class="major">
+									<span class="date">November 24, 2020</span>
+									<h1>This is a<br />
+									Generic Page</h1>
+									<p>Aenean ornare velit lacus varius enim ullamcorper proin aliquam<br />
+									facilisis ante sed etiam magna interdum congue. Lorem ipsum dolor<br />
+									amet nullam sed etiam veroeros.</p>
+								</header>
+                                <div class="image main"><img src="images/pic01.jpg" alt="" /></div>
+                                
+                                <h2>Introduction:</h2>
+
+                                <p>Crude oil is almost the most important commodity in the world. It is widely considered to be the lifeblood of our modern life and the crucial driver behind the radical transformations in the global economy over the last decades. The crude oil and its products are almost used in every single industry ranging from aviation to petrochemical. The world currently produces approximately 93 million barrels per day. The market of crude is bigger than all raw metal markets combined at approximate value of 1.7 trillion dollar a year. Given this exceptional importance, the price of crude oil is one of the key determinant of the global economic activity, the international trade, the stock prices, and the macroeconomic policies adopted by the countries worldwide. It has therefore been a subject of a great deal of research. An enormous number of governmental and international agencies, consultancies, hedge funds and think-tanks are always busy designing and evaluating the best approaches to forecast the crude oil prices and to capture its volatile trends. In this project, I will build an econometric model in order to study the dynamics of monthly Brent oil prices for the period from 1987 to 2018 using the Box-Jenkins Method. I will use several ARIMA models in order to assess their forecasting performances using the relevant statistical tests and techniques. The data for this project is obtained from the Energy Information Administration (EIA) for the spot price of Brent crude in Europe in American Dollar for the mentioned period</p>
+
+                                <h2>Packages used in Modelling and Forecasting</h2>
+
+                                <pre><code>library(ggplot2)
+                                    library(readxl)
+                                    library(urca)
+                                    library(tseries)
+                                    library(astsa)
+                                    library(forecast)</code></pre>
+
+                                <h2>Methodology</h2>
+
+                                <p><strong>1- Identification:</strong></p>
+
+                                <p>Following the Box-Jenkins method, the first step in building our econometric model should be started with the assessment of the stationarity of the time series under consideration. If the time series proves to be non-stationary, it should be differenced until it becomes stationary.</p>
+
+                                <p>Let us first import our data.</p>
+
+                                <pre><code>brent <- read.csv("C:/Users/Rami/Desktop/brent.csv")
+                                    head(brent)</code></pre>
+
+                                <pre><code>##         Date Price
+                                    ## 1 15/05/1987 18.58
+                                    ## 2 15/06/1987 18.86
+                                    ## 3 15/07/1987 19.86
+                                    ## 4 15/08/1987 18.98
+                                    ## 5 15/09/1987 18.31
+                                    ## 6 15/10/1987 18.76</code></pre>
+
+                                <p>Since we are going to conduct a time series analysis, we need to transform the dataframe into a time series object first.</p>
+                                
+                                <pre><code>brent_ts <- ts(brent[,2], start = c(1987,5), frequency = 12)</code></pre>
+
+                                <p>Let us then plot our series in order to capture its main charachteristics.</p>
+
+                                <pre><code>ts.plot(brent_ts)</code></pre>
+
+                                <img src="../images/oil-price-chart.png" alt="">
+
+                                <p>As we can see, our time series is far from being stationary. It has a positive trend in general, however, it includes volatile periods as well. The price of crude oil has been relatively stable during 1980s and 1990s before increasing drastically starting from 2000 onward. The price has then experienced a remarkable slump in 2009 as a result of the financial crisis. It then took an upward trend before sliding again in 2015 as a result of OPEC policy to restore its market share from shale oil producers.</p>
+
+                                <p>Let us check the autocorrelation plot for the series.</p>
+
+                                <pre><code>par(mfrow = c(2,1))
+                                    acf(brent_ts)
+                                    pacf(brent_ts)</code></pre>
+
+                                <img src="../images/series-brent.png" alt="">
+
+                                <p>The series is apparently non-stationary and this is confirmed by the plots of ACf -as if oil price was stationary, the ACF would decay to zero much faster. The ACF plot above suggests a strong persistence across all lags, that is, a small shock at one lag period will influence the the future predictions of the time series for a long time.</p>
+
+                                <p>Though the series looks non-stationary, it might be a good idea to conduct Augmented Dickey-Fuller Test in order to prove our “visual” conclusion.</p>
+
+                                <pre><code>adf.test(brent_ts)</code></pre>
+
+                                <pre><code>## 
+                                    ##  Augmented Dickey-Fuller Test
+                                    ## 
+                                    ## data:  brent_ts
+                                    ## Dickey-Fuller = -2.2194, Lag order = 7, p-value = 0.4845
+                                    ## alternative hypothesis: stationary</code></pre>
+
+                                <p>The p-value is larger than 0.05 and thus we fail to reject the null hypothesis which states that the time series includes a unit root. This indicates that the time series should be differenced in order to transform it into a stationary process.</p>
+
+                                <pre><code>diff_series <- diff(brent_ts)</code></pre>
+
+                                <pre><code>layout(matrix(c(1,2,3,3), 2, 2, byrow = TRUE))
+                                    b <- acf(diff_series)
+                                    c <- pacf(diff_series)
+                                    a <- ts.plot(diff_series)</code></pre>
+
+                                <img src="../images/series-diff-series.png" alt="">
+
+                                <p>We can see from the plot above that the series istelf and ACF look similar to a plot for the white noise process. The ACF drops to zero much faster comparing to the one for non-stationary series. The plot also shows that only two autocorrelations lie outside 95% confidence limits.</p>
+
+                                <pre><code>adf.test(diff_series)</code></pre>
+
+                                <pre><code>## 
+                                    ##  Augmented Dickey-Fuller Test
+                                    ## 
+                                    ## data:  diff_series
+                                    ## Dickey-Fuller = -7.7406, Lag order = 7, p-value = 0.01
+                                    ## alternative hypothesis: stationary</code></pre>
+
+                                <pre><code>And when we apply Augmented Dickey-Fuller Test on the differenced series, we got p-value of 0.01, which suggests that the series is stationary.</code></pre>
+                                
+                                <p><strong>2- Modelling:</strong></p>
+
+                                <p>The plots for ACF and PACF suggests that the suitable model for fitting the data could be ARIMA(1,1,0), however, for the purpose of this project, I’m going to simulate several models with different orders of p and q. I will also leave the task of fitting one of the models for R by using auto.arima() function. I will then compare AICs for the models and pick up two or three of them for forecasting.</p>
+
+                                <p>Before start fitting the models, I will split my data into training set and test set where the latter includes only the observations for the last 12 months. Splitting the data into training and test sets is one of the widely used practices when it comes to constructing predictive models. Using this technique will help us evaluating the accuracy of forecasting power by measuring how well the model is likely to forecast on new data that has not been part of fitting the model.</p>
+
+                                <pre><code>training <- subset(brent_ts, end = 367)
+                                    test <- subset(brent_ts, start = 368)</code></pre>
+
+                                <p><strong>- Model1: ARIMA (1, 1, 1)</strong></p>
+
+                                <pre><code>Model1 <- Arima(training, order = c(1,1,1), include.drift = TRUE)
+                                    summary(Model1)</code></pre>
+
+                                <pre><code>## Series: training 
+                                    ## ARIMA(1,1,1) with drift 
+                                    ## 
+                                    ## Coefficients:
+                                    ##          ar1      ma1   drift
+                                    ##       0.3948  -0.0215  0.1288
+                                    ## s.e.  0.1117   0.1187  0.3489
+                                    ## 
+                                    ## sigma^2 estimated as 17.24:  log likelihood=-1038.95
+                                    ## AIC=2085.91   AICc=2086.02   BIC=2101.52
+                                    ## 
+                                    ## Training set error measures:
+                                    ##                        ME     RMSE      MAE        MPE     MAPE      MASE
+                                    ## Training set 0.0002437218 4.129523 2.838451 -0.2315886 6.742997 0.2409493
+                                    ##                      ACF1
+                                    ## Training set 0.0004837868</code></pre>
+
+                                <p><strong>- Model2: ARIMA (1,1,0)</strong></p>
+
+                                <pre><code>Model2 <- Arima(training, order = c(1,1,0), include.drift = TRUE)
+                                    summary(Model2)</code></pre>
+
+                                <pre><code>## Series: training 
+                                    ## ARIMA(1,1,0) with drift 
+                                    ## 
+                                    ## Coefficients:
+                                    ##          ar1   drift
+                                    ##       0.3763  0.1284
+                                    ## s.e.  0.0484  0.3460
+                                    ## 
+                                    ## sigma^2 estimated as 17.19:  log likelihood=-1038.97
+                                    ## AIC=2083.94   AICc=2084.01   BIC=2095.65
+                                    ## 
+                                    ## Training set error measures:
+                                    ##                       ME   RMSE      MAE        MPE     MAPE      MASE
+                                    ## Training set 0.000365657 4.1297 2.836782 -0.2352411 6.738997 0.2408077
+                                    ##                      ACF1
+                                    ## Training set -0.002996357</code></pre>
+
+                                <p><strong>- Model3: ARIMA (2,1,2)</strong></p>
+
+                                <pre><code>Model3 <- Arima(training, order = c(2,1,2), include.drift = TRUE)
+                                    summary(Model3)</code></pre>
+
+                                <pre><code>## Series: training 
+                                    ## ARIMA(2,1,2) with drift 
+                                    ## 
+                                    ## Coefficients:
+                                    ##          ar1      ar2      ma1     ma2   drift
+                                    ##       1.4048  -0.5487  -1.0483  0.2030  0.1174
+                                    ## s.e.  0.1203   0.1115   0.1377  0.1387  0.2317
+                                    ## 
+                                    ## sigma^2 estimated as 17.02:  log likelihood=-1035.62
+                                    ## AIC=2083.24   AICc=2083.47   BIC=2106.65
+                                    ## 
+                                    ## Training set error measures:
+                                    ##                        ME     RMSE      MAE        MPE     MAPE      MASE
+                                    ## Training set -0.001586251 4.091538 2.830133 -0.3881241 6.705963 0.2402433
+                                    ##                     ACF1
+                                    ## Training set 0.001115057</code></pre>
+
+                                <p><strong>- Model4: ARIMA (2,1,0)</strong></p>
+
+                                <pre><code>Model4 <- Arima(training, order = c(2,1,0), include.drift = TRUE)
+                                    summary(Model4)</code></pre>
+
+                                <pre><code>## Series: training 
+                                    ## ARIMA(2,1,0) with drift 
+                                    ## 
+                                    ## Coefficients:
+                                    ##          ar1     ar2   drift
+                                    ##       0.3723  0.0107  0.1295
+                                    ## s.e.  0.0523  0.0522  0.3497
+                                    ## 
+                                    ## sigma^2 estimated as 17.24:  log likelihood=-1038.95
+                                    ## AIC=2085.9   AICc=2086.01   BIC=2101.51
+                                    ## 
+                                    ## Training set error measures:
+                                    ##                         ME     RMSE      MAE        MPE    MAPE      MASE
+                                    ## Training set -0.0001757545 4.129462 2.838979 -0.2319836 6.74433 0.2409942
+                                    ##                     ACF1
+                                    ## Training set 0.001734294</code></pre>
+
+                                <p><strong>- Model5: Auto Arima</strong></p>
+
+                                <pre><code>Model5 <- auto.arima(training)
+                                    summary(Model5)</code></pre>
+
+                                <pre><code>## Series: training 
+                                    ## ARIMA(1,1,0)(0,0,2)[12] 
+                                    ## 
+                                    ## Coefficients:
+                                    ##          ar1    sma1     sma2
+                                    ##       0.3942  0.0778  -0.1522
+                                    ## s.e.  0.0483  0.0522   0.0514
+                                    ## 
+                                    ## sigma^2 estimated as 16.7:  log likelihood=-1033.5
+                                    ## AIC=2075.01   AICc=2075.12   BIC=2090.62
+                                    ## 
+                                    ## Training set error measures:
+                                    ##                      ME     RMSE      MAE        MPE     MAPE      MASE
+                                    ## Training set 0.08280644 4.064694 2.796978 0.07071734 6.686554 0.2374287
+                                    ##                      ACF1
+                                    ## Training set -0.006713012</code></pre>
+
+                                <p>
+                                        <strong>Note:</strong> When we apply <strong>auto.arima()</strong> function on data, it chooses the best model to be ARIMA(1,1,0)(0,0,2)[12], which means that the function believes that the series of crude oil price includes a seasonal component.
+                                        </p>
+
+                                <table>
+                                            <thead>
+                                            <tr class="header">
+                                            <th align="center">Model</th>
+                                            <th align="center">Arima(1,1,1)</th>
+                                            <th align="center">ARIMA(1,1,0)</th>
+                                            <th align="center">ARIMA(2,1,2)</th>
+                                            <th align="center">ARIMA(2,1,0)</th>
+                                            <th align="center">ARIMA(1,1,0)(0,0,2)</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr class="odd">
+                                            <td align="center">AIC</td>
+                                            <td align="center">2086.02</td>
+                                            <td align="center">2084.01</td>
+                                            <td align="center">2083.47</td>
+                                            <td align="center">2086.01</td>
+                                            <td align="center">2075.12</td>
+                                            </tr>
+                                            </tbody>
+                                            </table>
+
+                                <p>We can see in table above that the model which has been chosen by auto.arima() has the lowest AIC. Moreover, models ARIMA (1,1,0) and ARIMA (2,1,2) have lower AIC comparing to ARIMA (1,1,1) and ARIMA (2,1,0).</p>
+
+                                <p><strong>3- Residual Analysis:</strong></p>
+
+                                <p>In addition to the comparison of AICs for our models, we need to make sure that the residuals of each one meet the assumptions of randomness, normal distribution and uncorrelation.</p>
+
+                                <pre><code>checkresiduals(Model1)</code></pre>
+
+                                <img src="../images/residual-analysis-time-series.png" alt="">
+
+                                <pre><code>## 
+                                    ##  Ljung-Box test
+                                    ## 
+                                    ## data:  Residuals from ARIMA(1,1,1) with drift
+                                    ## Q* = 45.47, df = 21, p-value = 0.001502
+                                    ## 
+                                    ## Model df: 3.   Total lags used: 24</code></pre>
+
+                                <pre><code>checkresiduals(Model2)</code></pre>
+
+                                <img src="../images/residual-analysis-time-series-1.png" alt="">
+
+                                <pre><code>## 
+                                    ##  Ljung-Box test
+                                    ## 
+                                    ## data:  Residuals from ARIMA(1,1,0) with drift
+                                    ## Q* = 45.274, df = 22, p-value = 0.002449
+                                    ## 
+                                    ## Model df: 2.   Total lags used: 24</code></pre>
+
+                                <pre><code>checkresiduals(Model3)</code></pre>
+
+                                <img src="../images/residual-analysis-drift.png" alt="">
+
+                                <pre><code>## 
+                                    ##  Ljung-Box test
+                                    ## 
+                                    ## data:  Residuals from ARIMA(2,1,2) with drift
+                                    ## Q* = 40.391, df = 19, p-value = 0.002907
+                                    ## 
+                                    ## Model df: 5.   Total lags used: 24</code></pre>
+
+                                <pre><code>checkresiduals(Model4)</code></pre>
+
+                                <img src="../images/residual-analysis-drift-1.png" alt="">
+
+                                <pre><code>## 
+                                    ##  Ljung-Box test
+                                    ## 
+                                    ## data:  Residuals from ARIMA(2,1,0) with drift
+                                    ## Q* = 45.537, df = 21, p-value = 0.001472
+                                    ## 
+                                    ## Model df: 3.   Total lags used: 24</code></pre>
+
+                                <pre><code>checkresiduals(Model5)</code></pre>
+
+                                <img src="../images/residual-arima-12.png" alt="">
+
+                                <pre><code>## 
+                                    ##  Ljung-Box test
+                                    ## 
+                                    ## data:  Residuals from ARIMA(1,1,0)(0,0,2)[12]
+                                    ## Q* = 30.429, df = 21, p-value = 0.08369
+                                    ## 
+                                    ## Model df: 3.   Total lags used: 24</code></pre>
+
+                                <p>The plots indicate that except for the seasonal model ARIMA (1,1,0)(0,0,2), the models residuals include autocorrelations at more than two lags (look in particular at spikes in lags 6, 7, 24 and 33). The plots also suggest that the residuals are normally distributed though with some skewness to the left. Although the residual analysis confirms the previous conclusion that the seasonal model is the best-fit model, we are going to pick ARIMA (1,1,0) and ARIMA (2,1,2) for forecasting process as well.</p>
+
+                                <p><strong>4- Forecasting:</strong></p>
+
+                                <P>I’m going now to conduct the forecasting process using the three models mentioned above. The accuracy of forecasts will be assessed upon Root Mean Square Error (RMSE) on test set for each model for a period of 12 months. The most accurate model will be then used to forecast crude oil price for the next six months.</P>
+
+                                <pre><code>Forecast1 <- forecast(Model2, h =12) #ARIMA(1,1,0)
+                                    accuracy(Forecast1, test)</code></pre>
+
+                                <pre><code>##                       ME     RMSE      MAE        MPE     MAPE      MASE
+                                    ## Training set 0.000365657 4.129700 2.836782 -0.2352411 6.738997 0.2408077
+                                    ## Test set     5.194276793 7.303298 5.829615  6.7454842 7.724763 0.4948621
+                                    ##                      ACF1 Theil's U
+                                    ## Training set -0.002996357        NA
+                                    ## Test set      0.203303549  1.268862</code></pre>
+
+                                <pre><code>Forecast2 <- forecast(Model3, h = 12) #ARIMA(2,1,2)
+                                    accuracy(Forecast2, test)</code></pre>
+
+                                <pre><code>##                        ME      RMSE      MAE        MPE      MAPE
+                                    ## Training set -0.001586251  4.091538 2.830133 -0.3881241  6.705963
+                                    ## Test set      8.625578801 10.693751 8.633881 11.4392016 11.452099
+                                    ##                   MASE        ACF1 Theil's U
+                                    ## Training set 0.2402433 0.001115057        NA
+                                    ## Test set     0.7329095 0.438766194  1.859437</code></pre>
+
+                                <pre><code>Forecast3 <- forecast(Model5, h = 12) #ARIMA(1,1,0)(0,0,2)[12]
+                                    accuracy(Forecast3, test)</code></pre>
+
+                                <pre><code>##                      ME     RMSE      MAE        MPE     MAPE      MASE
+                                    ## Training set 0.08280644 4.064694 2.796978 0.07071734 6.686554 0.2374287
+                                    ## Test set     5.27117099 8.032547 6.534277 6.75393412 8.696906 0.5546792
+                                    ##                      ACF1 Theil's U
+                                    ## Training set -0.006713012        NA
+                                    ## Test set      0.357278045  1.388365</code></pre>
+
+                                <p><strong>RMSE:</strong></p>
+
+                                <table>
+                                    <thead>
+                                    <tr class="header">
+                                    <th align="center">Model</th>
+                                    <th align="center">Arima (1,1,0)</th>
+                                    <th align="center">ARIMA (2,1,2)</th>
+                                    <th align="center">ARIMA (1,1,0)(0,0,2)</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="odd">
+                                    <td align="center">RMSE</td>
+                                    <td align="center">7.303298</td>
+                                    <td align="center">10.693751</td>
+                                    <td align="center">8.032547</td>
+                                    </tr>
+                                    </tbody>
+                                    </table>
+
+                                <p>The table above summarizes the values of RMSE for each model. The model ARIMA (1,1,0) has the lowest value of RMSE and thus it outpermfors the other two model in forecasting new data. The RMSE of test set is much higher than RMSE of training set for all models which could be deemed as a sign of overfitting (though the difference is relatively small). We can notice also that althoug the seasonal model ARIMA (1,1,0)(0,0,2) has been the “best” model in fitting data, it failed to outperform ARIMA (1,1,0) when it comes to forecasting.</p>
+
+                                <pre><code>Forecast <- forecast(Model2, h = 18)
+                                    plot(Forecast)
+                                    lines(test, col = "red")</code></pre>
+
+                                    <table>
+                                        <thead>
+                                        <tr class="header">
+                                        <th align="center">Month/Year</th>
+                                        <th align="center">Actual Value</th>
+                                        <th align="center">Forecasted Value</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr class="odd">
+                                        <td align="center">Dec-2017</td>
+                                        <td align="center">64.37</td>
+                                        <td align="center">64.74</td>
+                                        </tr>
+                                        <tr class="even">
+                                        <td align="center">Jan-2018</td>
+                                        <td align="center">69.08</td>
+                                        <td align="center">65.59</td>
+                                        </tr>
+                                        <tr class="odd">
+                                        <td align="center">Feb-2018</td>
+                                        <td align="center">65.32</td>
+                                        <td align="center">65.99</td>
+                                        </tr>
+                                        <tr class="even">
+                                        <td align="center">Mar-2018</td>
+                                        <td align="center">66.02</td>
+                                        <td align="center">66.22</td>
+                                        </tr>
+                                        <tr class="odd">
+                                        <td align="center">Apr-2018</td>
+                                        <td align="center">72.11</td>
+                                        <td align="center">66.38</td>
+                                        </tr>
+                                        <tr class="even">
+                                        <td align="center">May-2018</td>
+                                        <td align="center">76.98</td>
+                                        <td align="center">66.53</td>
+                                        </tr>
+                                        <tr class="odd">
+                                        <td align="center">Jun-2018</td>
+                                        <td align="center">74.41</td>
+                                        <td align="center">66.66</td>
+                                        </tr>
+                                        <tr class="even">
+                                        <td align="center">Jul-2018</td>
+                                        <td align="center">74.25</td>
+                                        <td align="center">66.79</td>
+                                        </tr>
+                                        <tr class="odd">
+                                        <td align="center">Aug-2018</td>
+                                        <td align="center">72.53</td>
+                                        <td align="center">66.92</td>
+                                        </tr>
+                                        <tr class="even">
+                                        <td align="center">Sep-2018</td>
+                                        <td align="center">78.89</td>
+                                        <td align="center">67.05</td>
+                                        </tr>
+                                        <tr class="odd">
+                                        <td align="center">Oct-2018</td>
+                                        <td align="center">81.03</td>
+                                        <td align="center">67.18</td>
+                                        </tr>
+                                        <tr class="even">
+                                        <td align="center">Nov-2018</td>
+                                        <td align="center">64.75</td>
+                                        <td align="center">67.31</td>
+                                        </tr>
+                                        <tr class="odd">
+                                        <td align="center">Dec-2018</td>
+                                        <td align="center"></td>
+                                        <td align="center">67.43</td>
+                                        </tr>
+                                        <tr class="even">
+                                        <td align="center">Jan-2019</td>
+                                        <td align="center"></td>
+                                        <td align="center">67.56</td>
+                                        </tr>
+                                        <tr class="odd">
+                                        <td align="center">Feb-2019</td>
+                                        <td align="center"></td>
+                                        <td align="center">67.69</td>
+                                        </tr>
+                                        <tr class="even">
+                                        <td align="center">Mar-2019</td>
+                                        <td align="center"></td>
+                                        <td align="center">67.82</td>
+                                        </tr>
+                                        <tr class="odd">
+                                        <td align="center">Apr-2019</td>
+                                        <td align="center"></td>
+                                        <td align="center">67.95</td>
+                                        </tr>
+                                        <tr class="even">
+                                        <td align="center">May-2019</td>
+                                        <td align="center"></td>
+                                        <td align="center">68.08</td>
+                                        </tr>
+                                        </tbody>
+                                        </table>
+
+                                <p>In this porject, the Box-Jenkins Method has been utilized to model the prices of brent crude oil for the period from May-1987 to Nov-2018. Five models have been simulated upon different AR and MA orders and three models of them were selected based on the value of AIC. The three models have then been diagnosed using the residuals analysis. The seasonal model ARIMA (1,1,0)(0,0,2), which was chosen by auto.arima function, proved to be the best-fit model. The three models were used to forecast a new set of data where the model ARIMA (1,1,0) showed the best performance with the lowest value of RMSE. Though our model proved to be little bit accurate in forecasting new data, it cannot be considered as a reliable one under any condition. The forecasting of crude oil prices has always been a hard task. The prices of crude are so sensitive to a wide range of complicated and multi-faceted factors including, among others, the volume of inventories, the weather condition, the speculations and the political tensions. Constructing models that can take into account these factors(though some of them are difficult to be qunatified) might provide much better forecasts than these which depend solely on historical data.</p>
+                                
+							</section>
+
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<!-- <section>
+							<form method="post" action="#">
+								<div class="fields">
+									<div class="field">
+										<label for="name">Name</label>
+										<input type="text" name="name" id="name" />
+									</div>
+									<div class="field">
+										<label for="email">Email</label>
+										<input type="text" name="email" id="email" />
+									</div>
+									<div class="field">
+										<label for="message">Message</label>
+										<textarea name="message" id="message" rows="3"></textarea>
+									</div>
+								</div>
+								<ul class="actions">
+									<li><input type="submit" value="Send Message" /></li>
+								</ul>
+							</form>
+						</section>
+						<section class="split contact">
+							<section class="alt">
+								<h3>Address</h3>
+								<p>1234 Somewhere Road #87257<br />
+								Nashville, TN 00000-0000</p>
+							</section>
+							<section>
+								<h3>Phone</h3>
+								<p><a href="#">(000) 000-0000</a></p>
+							</section>
+							<section>
+								<h3>Email</h3>
+								<p><a href="#">info@untitled.tld</a></p>
+							</section>
+							<section>
+								<h3>Social</h3>
+								<ul class="icons alt">
+									<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
+									<li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
+									<li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
+									<li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+								</ul>
+							</section>
+						</section> -->
+					</footer>
+
+				<!-- Copyright -->
+					<div id="copyright">
+						<ul><li>&copy; Untitled</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li></ul>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="../assets/js/jquery.scrollex.min.js"></script>
+			<script src="../assets/js/jquery.scrolly.min.js"></script>
+			<script src="../assets/js/browser.min.js"></script>
+			<script src="../assets/js/breakpoints.min.js"></script>
+			<script src="../assets/js/util.js"></script>
+			<script src="../assets/js/main.js"></script>
+			<script src="../assets/js/highlight.pack.js"></script>
+			<script>hljs.initHighlightingOnLoad();</script>
+
+	</body>
+</html>
