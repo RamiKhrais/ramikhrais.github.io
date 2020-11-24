@@ -1,0 +1,352 @@
+<!DOCTYPE HTML>
+<!--
+	Massively by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Brief Introduction to Time Series Analysis</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		<link rel="stylesheet" href="../assets/css/obsidian.css">
+        <noscript><link rel="stylesheet" href="../assets/css/noscript.css" /></noscript>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="../index.html" class="logo">Portfolio</a>
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<!-- <ul class="links">
+							<li><a href="index.html">This is Massively</a></li>
+							<li class="active"><a href="generic.html">Generic Page</a></li>
+							<li><a href="elements.html">Elements Reference</a></li>
+						</ul> -->
+						<!-- <ul class="icons">
+							<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+							<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+							<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+							<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+						</ul> -->
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Post -->
+							<section class="post">
+								<header class="major">
+									<span class="date">November 22, 2020</span>
+									<h1>Brief Introduction to Time Series Analysis<br />
+									</h1>
+									<p>Aenean ornare velit lacus varius enim ullamcorper proin aliquam<br />
+									facilisis ante sed etiam magna interdum congue. Lorem ipsum dolor<br />
+									amet nullam sed etiam veroeros.</p>
+								</header>
+                                <div class="image main"><img src="images/pic01.jpg" alt="" /></div>
+
+                                <h2>Time Series: Definition</h2>
+
+                                <p>A sequence of of data points being recorded at specific times.</p>
+
+                                <h2>Example of Time Series:</h2>
+
+                                <pre><code>plot(AirPassengers)</code></pre>
+
+                                <img src="../images/time-series.png" alt="">
+
+                                <h2>Basic Details of Time Series:</h2>
+
+                                <pre><code>library(astsa)</code></pre>
+                                <pre><code>start(AirPassengers)</code></pre>
+                                <pre><code>## [1] 1949    1</code></pre>
+                                <pre><code>end(AirPassengers)</code></pre>
+                                <pre><code>## [1] 1960   12</code></pre>
+                                <pre><code>frequency(AirPassengers)</code></pre>
+                                <pre><code>## [1] 12</code></pre>
+                                <pre><code>length(AirPassengers)</code></pre>
+                                <pre><code>## [1] 144</code></pre>
+
+                                <h2>The Components of Time Series:</h2>
+                                <strong>1- Trend:</strong>
+                                <p>
+                                    Overall upward or downward pattern of the data. This trend in the series might be a result of political, economic or technological factors among other factors.
+                                    </p>
+                                    <strong>2- Seasonality:</strong>
+                                    <p>
+                                    Regular pattern of upward/downward fluctuations that occur within certain period of time due to external factors such as waether, customs, holidays ..etc.
+                                    </p>
+                                    <strong>3- Noise:</strong>
+                                    <p>
+                                    Unsystemtaic fluctuations that happen due to random variation or unforseen events.
+                                    </p>
+
+                                <h2>Decomposition of Time Series</h2>
+
+                                <pre><code>plot(decompose(AirPassengers))</code></pre>
+
+                                <img src="../images/decomp-timeseries.png" alt="">
+
+                                <h2>Basic Time Series Models</h2>
+
+                                <strong>1- White Noise (WN):</strong>
+                                <p>
+                                    The simplest exapmple of stationary process. It is a purely random process that has constant mean and variace and has zero autocovariance. Each observation in the white noise series is uncorrelated with all other values in the sequence.
+                                    </p>
+
+                                <pre><code>WN <- arima.sim(model = list(order = c(0,0,0)), n = 200)
+                                    ts.plot(WN)</code></pre>
+
+                                <img src="../images/white-noise.png" alt="">
+
+                                <strong>2- Random Walk:</strong>
+                                <p>
+                                    A time series said to follow a random walk if the first differences are random. The random walk process can be deemed as the simplest example of non-stationary process.
+                                    </p>
+
+                                <p><span class="math display">\[y_t = y_{t-1} + \varepsilon_t\]</span> where <span class="math inline">\(\varepsilon_t\)</span> is white noise.</p>
+                                
+                                <pre><code>RW <- arima.sim(model = list(order = c(0,1,0)), n = 200)
+                                    ts.plot(RW)</code></pre>
+
+                                <img src="../images/ramdom-walk.png" alt="">
+
+                                <strong>3- Autoregressive Model(AR):</strong>
+                                
+                                <p>
+                                    A time series in which <span class="math inline">\(y_t\)</span> depends only on its past values.
+                                    </p>
+                                    <p><span class="math display">\[y_{t} = c + \phi_{1}y_{t-1} + \phi_{2}y_{t-2} + \dots + \phi_{p}y_{t-p} + \varepsilon_{t}\]</span> Where:</p>
+                                    <p>when <span class="math inline">\(\phi_1\)</span> = 0, <span class="math inline">\(y_t\)</span> is equivalent to white noise.</p>
+                                    <p>when <span class="math inline">\(\phi_1\)</span> = 1 and <span class="math inline">\(c\)</span> =0, <span class="math inline">\(y_t\)</span> is equivalent to random walk.</p>
+
+                                    <pre><code>AR <- arima.sim(model = list(ar = 0.5), n = 200)
+                                        ts.plot(AR)</code></pre>
+
+                                    <img src="../images/auto-regressive.png" alt="">
+
+                                    <strong>4- Simple Moving Average(MA):</strong>
+                                
+                                    <p>
+                                        A time series in which <span class="math inline">\(y_t\)</span> depends only on the error terms including the current and the previous ones.
+                                        </p>
+                                        <p><span class="math display">\[y_{t} = c + \varepsilon_t + \theta_{1}\varepsilon_{t-1} + \theta_{2}\varepsilon_{t-2} + \dots + \theta_{q}\varepsilon_{t-q}\]</span></p>
+                                        <p>Where:</p>
+                                        <p>when <span class="math inline">\(\theta_1\)</span> = 0, <span class="math inline">\(y_t\)</span> is equivalent to a white noise.</p>
+                                        <p>when <span class="math inline">\(\theta_1\)</span> <span class="math inline">\(\ne0\)</span>, <span class="math inline">\(y_t\)</span> depends on both <span class="math inline">\(\varepsilon_{t}\)</span> and <span class="math inline">\(\varepsilon_{t-1}\)</span>.</p>
+
+                                <pre><code>MA <- arima.sim(model = list(ma = 0.5), n = 200)
+                                    ts.plot(MA)</code></pre>
+
+                                <img src="../images/simple-moving-average.png" alt="">
+
+                                <strong>5- ARMA Model:</strong>
+                                
+                                <p>
+                                    A time series that combines AR model and MA model. In other words, the ARMA model is just an autoregressive model with autocorrelated errors.
+                                    </p>
+                                    <p><span class="math display">\[y_t = µ + \phi_{1}y_{t-1} + ... + \phi_{p}y_{t-p} + \theta_{1}\varepsilon_{t-1} + .... + \theta_{q}\varepsilon_{t-q}\]</span></p>
+
+                                
+                                <pre><code>ARMA <- arima.sim(model = list(ar = 0.75, ma = 0.3), n = 200)
+                                    ts.plot(ARMA)</code></pre>
+
+                                <img src="../images/arma-model.png" alt="">
+
+                                <strong>6- ARIMA Model:</strong>
+
+                                <p>
+                                    A time series that combines AR modle and MA model after integreating the differences needed for stationarity.
+                                    </p>
+                                    <p><span class="math display">\[y&#39;_{t} = c + \phi_{1}y&#39;_{t-1} + \cdots + \phi_{p}y&#39;_{t-p}  + \theta_{1}\varepsilon_{t-1} + \cdots + \theta_{q}\varepsilon_{t-q} + \varepsilon_{t}\]</span></p>
+                                    <p>where:</p>
+                                    <p><span class="math inline">\(y&#39;_{t}\)</span> is the differenced series.</p>
+                                    <p><span class="math inline">\(p\)</span> = order of AR part.</p>
+                                    <p><span class="math inline">\(d\)</span> = degree of first differencing.</p>
+                                    <p><span class="math inline">\(q\)</span> = order of MA part.</p>
+
+   
+                                <h2>The Modelling of ARMA Models: Box-Jenkins Method</h2>
+
+                                <p>The most popular thechnique in modelling and forecasting time series is Box-Jenkis Method (named after George Box and Gwilym Jenkins who wrote a book on time series analysis in 1976). The method follows three steps:</p>
+                                
+                                <p>
+                                    <strong>1- Identification:</strong> Assessing whether the time series is stationary, and if not, we should know how many differences are required to make it stationary. Assume that we have a non-stationary process as follows:
+                                    </p>
+
+                                <pre><code>A <- arima.sim(model = list(order = c(0,1,0)), n = 200)
+                                    ts.plot(A)</code></pre>
+
+                                <img src="../images/identification.png" alt="">
+
+                                <p>If we want to transform a non-stationary process into a stationary one, we can apply diffrencing on the time series.</p>
+
+                                <pre><code>Stationary <- diff(A)
+                                    ts.plot(Stationary)</code></pre>
+
+                                <img src="../images/stationary.png" alt="">
+
+                                <p>
+                                    Then we need to identify the parameters of ARMA model for our data. How?
+                                    </p>
+                                    <p>
+                                    There are two diagnostic plots that can be used to help choosing the <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> parameters of ARMA model.
+                                    </p>
+                                    <p>
+                                    <strong>1- Autocorrelation Function (AFC)</strong>: The plot summarizes the correlation of an observation with lag value.
+                                    </p>
+                                    <p>
+                                    <strong>2- Partial Autocorrelation Function (PACF)</strong>: The plot summarizes the correlation of an observation that is not accounted for by prior lagged observation.
+                                    </p>
+
+                                <h2>Rules of Autocorrelations for Chosing the Order of Model:</h2>
+
+                                <p>
+                                    <ul>
+                                    <li>If ACF tails off and PACF cuts off at lag p, this should be a strong indictaor of possible AR(p) model.
+                                    </p></li>
+                                    </ul>
+
+                                <pre><code>AR <- arima.sim(model = list(ar = 0.9), n = 200)
+                                    acf2(AR)</code></pre>
+
+                                <img src="../images/series-ar.png" alt="">
+
+                                <p>
+                                    <ul>
+                                    <li>If ACF cuts off at laq q and PACF tails off, this should be a strong indictaor of possible MA(q) model.
+                                    </p></li>
+                                    </ul>
+
+                                <pre><code>MA <- arima.sim(model = list(ma = -0.5), n = 200)
+                                    acf2(MA)</code></pre>
+
+                                <img src="../images/series-ma.png" alt="">
+
+                                <ul>
+                                    <li>If both ACF and PACF are tailing off, this should be a strong indicator of ARMA(p,q) model.
+                                    </p></li>
+                                    </ul>
+
+                                <pre><code>ARMA <- arima.sim(model = list(ar = 0.65, ma = -0.4), n  = 200)
+                                    acf2(ARMA)</code></pre>
+
+                                <img src="../images/series-arma.png" alt="">
+
+                                <strong>2- Estimation:</strong> The estimation of the of the model parameters involves using numerical method to minimize the error terms.
+                                </p>
+
+                                <pre><code>x <- arima.sim(list(order = c(1, 0, 1), ar = 0.9, ma = -0.4), n = 200)
+                                    fit_x <- sarima(x, p = 1, d = 0, q = 1)</code></pre>
+
+                                <img src="../images/estimation.png" alt="">
+
+                                <p>
+                                    <strong>3- Diagnostic Checking:</strong> Assessing whether the model overfits the data. This means that the model is more complex than it needs to be and captures radnom noise in the data.
+                                    </p>
+
+                                    <p><strong>AIC/BIC:</strong> measures the errors and penalizes for adding parameters and help us choosing the suitable model.</p>
+                                    <p><span class="math display">\[(observed - predicted)^2 + k (p + q)\]</span></p>
+                                    <p>Where:</p>
+                                    <p>AIC has k = 2 and BIC has k = log(k)</p>
+
+                                    <p>
+                                        In addition to compute the value of AIC and BIC, we should also check the residuals against the following assumptions:
+                                        </p>
+                                        <p>1- Residuals should be uncorrelated.</p>
+                                        <p>2- Residuals should have zero mean.</p>
+                                        <p>3- Residuals should have constant variance.</p>
+                                        <p>4- Residuals should be normally distibuted.</p>
+
+
+
+
+
+
+
+
+
+
+							</section>
+
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<!-- <section>
+							<form method="post" action="#">
+								<div class="fields">
+									<div class="field">
+										<label for="name">Name</label>
+										<input type="text" name="name" id="name" />
+									</div>
+									<div class="field">
+										<label for="email">Email</label>
+										<input type="text" name="email" id="email" />
+									</div>
+									<div class="field">
+										<label for="message">Message</label>
+										<textarea name="message" id="message" rows="3"></textarea>
+									</div>
+								</div>
+								<ul class="actions">
+									<li><input type="submit" value="Send Message" /></li>
+								</ul>
+							</form>
+						</section>
+						<section class="split contact">
+							<section class="alt">
+								<h3>Address</h3>
+								<p>1234 Somewhere Road #87257<br />
+								Nashville, TN 00000-0000</p>
+							</section>
+							<section>
+								<h3>Phone</h3>
+								<p><a href="#">(000) 000-0000</a></p>
+							</section>
+							<section>
+								<h3>Email</h3>
+								<p><a href="#">info@untitled.tld</a></p>
+							</section>
+							<section>
+								<h3>Social</h3>
+								<ul class="icons alt">
+									<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
+									<li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
+									<li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
+									<li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+								</ul>
+							</section>
+						</section> -->
+					</footer>
+
+				<!-- Copyright -->
+					<div id="copyright">
+						<ul><li>&copy; Untitled</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li></ul>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="../assets/js/jquery.scrollex.min.js"></script>
+			<script src="../assets/js/jquery.scrolly.min.js"></script>
+			<script src="../assets/js/browser.min.js"></script>
+			<script src="../assets/js/breakpoints.min.js"></script>
+			<script src="../assets/js/util.js"></script>
+			<script src="../assets/js/main.js"></script>
+			<script src="../assets/js/highlight.pack.js"></script>
+			<script>hljs.initHighlightingOnLoad();</script>
+
+	</body>
+</html>
