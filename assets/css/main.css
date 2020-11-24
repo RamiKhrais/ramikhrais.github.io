@@ -114,6 +114,10 @@ input, select, textarea {
 			transition: none !important;
 		}
 
+	th {
+		text-align: center;
+	}
+
 /* Type */
 
 	html {
