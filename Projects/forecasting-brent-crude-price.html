@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Analysis of Airlines Market in US</title>
+		<title>Forecasting Brent Crude Oil Prices: Box-Jenkins Method</title>
         <meta charset="utf-8" />
         <meta name="image" property="og:image" content="https://ramikhrais.github.io/ramikhrais.github.io/images/crude-oil.jpg">
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
@@ -267,7 +267,7 @@
                                         <strong>Note:</strong> When we apply <strong>auto.arima()</strong> function on data, it chooses the best model to be ARIMA(1,1,0)(0,0,2)[12], which means that the function believes that the series of crude oil price includes a seasonal component.
                                         </p>
 
-                                <table>
+                                <!-- <table>
                                             <thead>
                                             <tr class="header">
                                             <th align="center">Model</th>
@@ -288,7 +288,36 @@
                                             <td align="center">2075.12</td>
                                             </tr>
                                             </tbody>
-                                            </table>
+                                            </table> -->
+
+
+
+
+                                            <div class="table-wrapper">
+                                                <table>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Model</th>
+                                                            <th>Arima(1,1,1)</th>
+                                                            <th>ARIMA(1,1,0)</th>
+                                                            <th>ARIMA(2,1,2)</th>
+                                                            <th>ARIMA(2,1,0)</th>
+                                                            <th>ARIMA(1,1,0)(0,0,2)</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>AIC</td>
+                                                            <td>2086.02</td>
+                                                            <td>2084.01</td>
+                                                            <td>2083.47</td>
+                                                            <td>2086.01</td>
+                                                            <td>2075.12</td>
+                                                        </tr>
+                                                </table>
+                                            </div>            
+
+                            
 
                                 <p>We can see in table above that the model which has been chosen by auto.arima() has the lowest AIC. Moreover, models ARIMA (1,1,0) and ARIMA (2,1,2) have lower AIC comparing to ARIMA (1,1,1) and ARIMA (2,1,0).</p>
 
@@ -394,132 +423,135 @@
 
                                 <p><strong>RMSE:</strong></p>
 
-                                <table>
-                                    <thead>
-                                    <tr class="header-table">
-                                    <th align="center">Model</th>
-                                    <th align="center">Arima (1,1,0)</th>
-                                    <th align="center">ARIMA (2,1,2)</th>
-                                    <th align="center">ARIMA (1,1,0)(0,0,2)</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr class="odd">
-                                    <td align="center">RMSE</td>
-                                    <td align="center">7.303298</td>
-                                    <td align="center">10.693751</td>
-                                    <td align="center">8.032547</td>
-                                    </tr>
-                                    </tbody>
+                                <div class="table-wrapper">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Model</th>
+                                                <th>Arima(1,1,0)</th>
+                                                <th>ARIMA(2,1,2)</th>
+                                                <th>ARIMA(1,1,0)(0,0,2)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>RMSE</td>
+                                                <td>7.303298</td>
+                                                <td>10.693751</td>
+                                                <td>8.032547</td>
+                                            </tr>
                                     </table>
+                                </div>            
 
                                 <p>The table above summarizes the values of RMSE for each model. The model ARIMA (1,1,0) has the lowest value of RMSE and thus it outpermfors the other two model in forecasting new data. The RMSE of test set is much higher than RMSE of training set for all models which could be deemed as a sign of overfitting (though the difference is relatively small). We can notice also that althoug the seasonal model ARIMA (1,1,0)(0,0,2) has been the “best” model in fitting data, it failed to outperform ARIMA (1,1,0) when it comes to forecasting.</p>
 
                                 <pre><code>Forecast <- forecast(Model2, h = 18)
                                     plot(Forecast)
                                     lines(test, col = "red")</code></pre>
-
+                                <div class="table-wrapper">
                                     <table>
                                         <thead>
-                                        <tr class="header">
-                                        <th align="center">Month/Year</th>
-                                        <th align="center">Actual Value</th>
-                                        <th align="center">Forecasted Value</th>
+                                        <tr>
+                                        <th>Month/Year</th>
+                                        <th>Actual Value</th>
+                                        <th>Forecasted Value</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr class="odd">
-                                        <td align="center">Dec-2017</td>
-                                        <td align="center">64.37</td>
-                                        <td align="center">64.74</td>
+                                        <tr>
+                                        <td>Dec-2017</td>
+                                        <td>64.37</td>
+                                        <td>64.74</td>
                                         </tr>
-                                        <tr class="even">
-                                        <td align="center">Jan-2018</td>
-                                        <td align="center">69.08</td>
-                                        <td align="center">65.59</td>
+                                        <tr>
+                                        <td>Jan-2018</td>
+                                        <td>69.08</td>
+                                        <td>65.59</td>
                                         </tr>
-                                        <tr class="odd">
-                                        <td align="center">Feb-2018</td>
-                                        <td align="center">65.32</td>
-                                        <td align="center">65.99</td>
+                                        <tr>
+                                        <td>Feb-2018</td>
+                                        <td>65.32</td>
+                                        <td>65.99</td>
                                         </tr>
-                                        <tr class="even">
-                                        <td align="center">Mar-2018</td>
-                                        <td align="center">66.02</td>
-                                        <td align="center">66.22</td>
+                                        <tr>
+                                        <td>Mar-2018</td>
+                                        <td>66.02</td>
+                                        <td>66.22</td>
                                         </tr>
-                                        <tr class="odd">
-                                        <td align="center">Apr-2018</td>
-                                        <td align="center">72.11</td>
-                                        <td align="center">66.38</td>
+                                        <tr>
+                                        <td>Apr-2018</td>
+                                        <td>72.11</td>
+                                        <td>66.38</td>
                                         </tr>
-                                        <tr class="even">
-                                        <td align="center">May-2018</td>
-                                        <td align="center">76.98</td>
-                                        <td align="center">66.53</td>
+                                        <tr>
+                                        <td>May-2018</td>
+                                        <td>76.98</td>
+                                        <td>66.53</td>
                                         </tr>
-                                        <tr class="odd">
-                                        <td align="center">Jun-2018</td>
-                                        <td align="center">74.41</td>
-                                        <td align="center">66.66</td>
+                                        <tr>
+                                        <td>Jun-2018</td>
+                                        <td>74.41</td>
+                                        <td>66.66</td>
                                         </tr>
-                                        <tr class="even">
-                                        <td align="center">Jul-2018</td>
-                                        <td align="center">74.25</td>
-                                        <td align="center">66.79</td>
+                                        <tr>
+                                        <td>Jul-2018</td>
+                                        <td>74.25</td>
+                                        <td>66.79</td>
                                         </tr>
-                                        <tr class="odd">
-                                        <td align="center">Aug-2018</td>
-                                        <td align="center">72.53</td>
-                                        <td align="center">66.92</td>
+                                        <tr>
+                                        <td>Aug-2018</td>
+                                        <td>72.53</td>
+                                        <td>66.92</td>
                                         </tr>
-                                        <tr class="even">
-                                        <td align="center">Sep-2018</td>
-                                        <td align="center">78.89</td>
-                                        <td align="center">67.05</td>
+                                        <tr>
+                                        <td>Sep-2018</td>
+                                        <td>78.89</td>
+                                        <td>67.05</td>
                                         </tr>
-                                        <tr class="odd">
-                                        <td align="center">Oct-2018</td>
-                                        <td align="center">81.03</td>
-                                        <td align="center">67.18</td>
+                                        <tr>
+                                        <td>Oct-2018</td>
+                                        <td>81.03</td>
+                                        <td>67.18</td>
                                         </tr>
-                                        <tr class="even">
-                                        <td align="center">Nov-2018</td>
-                                        <td align="center">64.75</td>
-                                        <td align="center">67.31</td>
+                                        <tr>
+                                        <td>Nov-2018</td>
+                                        <td>64.75</td>
+                                        <td>67.31</td>
                                         </tr>
-                                        <tr class="odd">
-                                        <td align="center">Dec-2018</td>
-                                        <td align="center"></td>
-                                        <td align="center">67.43</td>
+                                        <tr>
+                                        <td>Dec-2018</td>
+                                        <td></td>
+                                        <td>67.43</td>
                                         </tr>
-                                        <tr class="even">
-                                        <td align="center">Jan-2019</td>
-                                        <td align="center"></td>
-                                        <td align="center">67.56</td>
+                                        <tr>
+                                        <td>Jan-2019</td>
+                                        <td></td>
+                                        <td>67.56</td>
                                         </tr>
-                                        <tr class="odd">
-                                        <td align="center">Feb-2019</td>
-                                        <td align="center"></td>
-                                        <td align="center">67.69</td>
+                                        <tr>
+                                        <td>Feb-2019</td>
+                                        <td></td>
+                                        <td>67.69</td>
                                         </tr>
-                                        <tr class="even">
-                                        <td align="center">Mar-2019</td>
-                                        <td align="center"></td>
-                                        <td align="center">67.82</td>
+                                        <tr>
+                                        <td>Mar-2019</td>
+                                        <td></td>
+                                        <td>67.82</td>
                                         </tr>
-                                        <tr class="odd">
-                                        <td align="center">Apr-2019</td>
-                                        <td align="center"></td>
-                                        <td align="center">67.95</td>
+                                        <tr>
+                                        <td>Apr-2019</td>
+                                        <td></td>
+                                        <td>67.95</td>
                                         </tr>
-                                        <tr class="even">
-                                        <td align="center">May-2019</td>
-                                        <td align="center"></td>
-                                        <td align="center">68.08</td>
+                                        <tr>
+                                        <td>May-2019</td>
+                                        <td></td>
+                                        <td>68.08</td>
                                         </tr>
                                         </tbody>
                                         </table>
+
+                                    </div>
 
                                 <p>In this porject, the Box-Jenkins Method has been utilized to model the prices of brent crude oil for the period from May-1987 to Nov-2018. Five models have been simulated upon different AR and MA orders and three models of them were selected based on the value of AIC. The three models have then been diagnosed using the residuals analysis. The seasonal model ARIMA (1,1,0)(0,0,2), which was chosen by auto.arima function, proved to be the best-fit model. The three models were used to forecast a new set of data where the model ARIMA (1,1,0) showed the best performance with the lowest value of RMSE. Though our model proved to be little bit accurate in forecasting new data, it cannot be considered as a reliable one under any condition. The forecasting of crude oil prices has always been a hard task. The prices of crude are so sensitive to a wide range of complicated and multi-faceted factors including, among others, the volume of inventories, the weather condition, the speculations and the political tensions. Constructing models that can take into account these factors(though some of them are difficult to be qunatified) might provide much better forecasts than these which depend solely on historical data.</p>
                                 
