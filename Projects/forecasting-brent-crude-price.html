@@ -144,7 +144,7 @@
 
                                 <pre><code>And when we apply Augmented Dickey-Fuller Test on the differenced series, we got p-value of 0.01, which suggests that the series is stationary.</code></pre>
                                 
-                                <p><strong>2- Modelling:</strong></p>
+                                <h3>2- Modelling:</h3>
 
                                 <p>The plots for ACF and PACF suggests that the suitable model for fitting the data could be ARIMA(1,1,0), however, for the purpose of this project, I’m going to simulate several models with different orders of p and q. I will also leave the task of fitting one of the models for R by using auto.arima() function. I will then compare AICs for the models and pick up two or three of them for forecasting.</p>
 
@@ -153,7 +153,7 @@
                                 <pre><code>training <- subset(brent_ts, end = 367)
                                     test <- subset(brent_ts, start = 368)</code></pre>
 
-                                <p><strong>- Model1: ARIMA (1, 1, 1)</strong></p>
+                                <h4>Model1: ARIMA (1, 1, 1)</h4>
 
                                 <pre><code>Model1 <- Arima(training, order = c(1,1,1), include.drift = TRUE)
                                     summary(Model1)</code></pre>
@@ -175,7 +175,7 @@
                                     ##                      ACF1
                                     ## Training set 0.0004837868</code></pre>
 
-                                <p><strong>- Model2: ARIMA (1,1,0)</strong></p>
+                                <h4>Model2: ARIMA (1,1,0)</h4>
 
                                 <pre><code>Model2 <- Arima(training, order = c(1,1,0), include.drift = TRUE)
                                     summary(Model2)</code></pre>
@@ -197,7 +197,7 @@
                                     ##                      ACF1
                                     ## Training set -0.002996357</code></pre>
 
-                                <p><strong>- Model3: ARIMA (2,1,2)</strong></p>
+                                <h4>Model3: ARIMA (2,1,2)</h4>
 
                                 <pre><code>Model3 <- Arima(training, order = c(2,1,2), include.drift = TRUE)
                                     summary(Model3)</code></pre>
@@ -219,7 +219,7 @@
                                     ##                     ACF1
                                     ## Training set 0.001115057</code></pre>
 
-                                <p><strong>- Model4: ARIMA (2,1,0)</strong></p>
+                                <h4>Model4: ARIMA (2,1,0)</h4>
 
                                 <pre><code>Model4 <- Arima(training, order = c(2,1,0), include.drift = TRUE)
                                     summary(Model4)</code></pre>
@@ -241,7 +241,7 @@
                                     ##                     ACF1
                                     ## Training set 0.001734294</code></pre>
 
-                                <p><strong>- Model5: Auto Arima</strong></p>
+                                <h4>Model5: Auto Arima</h4>
 
                                 <pre><code>Model5 <- auto.arima(training)
                                     summary(Model5)</code></pre>
@@ -321,7 +321,7 @@
 
                                 <p>We can see in table above that the model which has been chosen by auto.arima() has the lowest AIC. Moreover, models ARIMA (1,1,0) and ARIMA (2,1,2) have lower AIC comparing to ARIMA (1,1,1) and ARIMA (2,1,0).</p>
 
-                                <p><strong>3- Residual Analysis:</strong></p>
+                                <h4>3- Residual Analysis:</h4>
 
                                 <p>In addition to the comparison of AICs for our models, we need to make sure that the residuals of each one meet the assumptions of randomness, normal distribution and uncorrelation.</p>
 
@@ -387,7 +387,7 @@
 
                                 <p>The plots indicate that except for the seasonal model ARIMA (1,1,0)(0,0,2), the models residuals include autocorrelations at more than two lags (look in particular at spikes in lags 6, 7, 24 and 33). The plots also suggest that the residuals are normally distributed though with some skewness to the left. Although the residual analysis confirms the previous conclusion that the seasonal model is the best-fit model, we are going to pick ARIMA (1,1,0) and ARIMA (2,1,2) for forecasting process as well.</p>
 
-                                <p><strong>4- Forecasting:</strong></p>
+                                <h3>4- Forecasting:</h3>
 
                                 <P>I’m going now to conduct the forecasting process using the three models mentioned above. The accuracy of forecasts will be assessed upon Root Mean Square Error (RMSE) on test set for each model for a period of 12 months. The most accurate model will be then used to forecast crude oil price for the next six months.</P>
 
@@ -421,7 +421,7 @@
                                     ## Training set -0.006713012        NA
                                     ## Test set      0.357278045  1.388365</code></pre>
 
-                                <p><strong>RMSE:</strong></p>
+                                <h4>RMSE:</h4>
 
                                 <div class="table-wrapper">
                                     <table>
