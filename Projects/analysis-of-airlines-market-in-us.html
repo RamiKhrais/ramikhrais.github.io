@@ -50,7 +50,7 @@
 									<h1>Analysis of Airlines Market in US<br />
 									</h1>
 
-									<p>In this porject, I did analyse the most important trends in the US's airlines market in 2011. <br> The datasets that has been analysed is oncerning 15 carriers</p> <br>
+									<p>In this project, I did analyse the most important trends in the US's airlines market in 2011. <br> The datasets that has been analysed is concerning 15 carriers</p> <br>
 									
 
 								</header>
@@ -102,7 +102,7 @@
 										## $ Diverted          <int> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
 									</code></pre>
 
-									<p>It seems that the carriers have been regestired by their codes instead of their names. It might be more convenient to assign the full name for each carrier.</p>
+									<p>It seems that the carriers have been registered by their codes instead of their names. It might be more convenient to assign the full name for each carrier.</p>
 
 									<pre><code>lut <- c("AA" = "American", "AS" = "Alaska", "B6" = "JetBlue", "CO" = "Continental", 
 										"DL" = "Delta", "OO" = "SkyWest", "UA" = "United", "US" = "US_Airways", 
@@ -401,7 +401,7 @@
 										<img src="../images/two-largest-players-mm.png" alt="">
 
 										<h2>More Insights Ahead</h2>
-										<p>Everthing looks good so far. Let’s try now to get some spatial insights by aaking: <h2>What is the most active departure airport for each carrier in the weekend?</h2></p>
+										<p>Everything looks good so far. Let’s try now to get some spatial insights by asking: <h2>What is the most active departure airport for each carrier in the weekend?</h2></p>
 
 										<pre><code>Origin_carr <- hflights %>%
 															filter(DayOfWeek %in% c(6, 7)) %>%
@@ -657,7 +657,7 @@
 
 										<h2>Cancelled … Delayed!</h2>
 
-										<p>Let’s try to extract some useful insights regarding the dealyed and cancelled flights by asking: <h2>Which carrier has the highest level of cancelled flights?</h2></p>
+										<p>Let’s try to extract some useful insights regarding the delayed and cancelled flights by asking: <h2>Which carrier has the highest level of cancelled flights?</h2></p>
 
 										<pre><code>Cancelled_Carr <- hflights %>%
 											filter(Cancelled == 1) %>%
@@ -788,16 +788,16 @@
 
 
 										<h2>Conclusion1:</h2>
-										<p>The first three graphs show that the two dominant carriers share almost the same performance pattern. Within a given week, both ExpressJet and Continental have their highest numbers of flights on Monday, Thursday and Friday, while the number of flights reaches its trough on Saturday. The data for daily performance within a month reveals that the number of flights usually slip on 4th and 29th for both carriers and that ExpressJet’s flights peak on 28th. The monthly data shows that both carriers have their flight reaching a peak in July at 6174 and 6728 flights for Continental and ExpressJet respectively. The same data shows also that the trough for both carriers takes place in February and that, opposed to the general trend, Continental’s flights outpace ExpressJet’s ones during the last three month of the year.</p>
+										<p>The first three graphs show that the two dominant carriers share almost the same performance pattern. Within a given week, both ExpressJet and Continental have their highest numbers of flights on Monday, Thursday and Friday, while the number of flights reaches its trough on Saturday. The data for daily performance within a month reveals that the number of flights usually slip on 4th and 29th for both carriers and that ExpressJet’s flights peak on 28th. The monthly data shows that both carriers have their flight reaching a peak in July at 6174 and 6728 flights for Continental and ExpressJet respectively. The same data shows also that the trough for both carriers takes place in February and that, opposed to the general trend, Continental’s flights outpace ExpressJet’s ones during the last three months of the year.</p>
 
 										<h2>Conclusion2:</h2>
 										<p>The extracted data reveals that we have only two airports (George Bush Intercontinental/Houston Airport and William P. Hobby Airport) as departure points for all carriers in the dataset. The data also shows that Dallas Love Airport is the most visited destination in the weekend when it comes to Southwest airlines while Charlotte Douglas International Airport is the most visited destination in the weekend when it comes to Mesa Airlines. The data reveals in addition that the route from William P. Hobby Airport to Dallas Love Field Airport is the most active route during the weekend.</p>
 
 										<h2>Conclusion3:</h2>
-										<p>The seasonal insights shows that Dallas Love Field Airport is the most visited destination in autumn, winter and summer during the weekend while Hartsfield–Jackson Atlanta International Airport is the most visited destination in spring. The data also shows that Charlotte Douglas International Airport is the less visited destination in autumn and spring during the weekend. As for summer and winter, Newark Liberty International Airport and San Antonio International Airport are the less visited destinations respectively</p>
+										<p>The seasonal insights show that Dallas Love Field Airport is the most visited destination in autumn, winter and summer during the weekend while Hartsfield–Jackson Atlanta International Airport is the most visited destination in spring. The data also shows that Charlotte Douglas International Airport is the less visited destination in autumn and spring during the weekend. As for summer and winter, Newark Liberty International Airport and San Antonio International Airport are the less visited destinations respectively</p>
 
 										<h2>Conclusion4:</h2>
-										<p>The data shows that ExpressJet and Southwest have the highest numbers of cancelled flights and this result seems intuitive as these carriers have the highest number of flights. The data shows that JetBlue and AtlanticSoutheast have the highest average of departure and arrival delays while Mesa has the lwoest average of dealys.</p>
+										<p>The data shows that ExpressJet and Southwest have the highest numbers of cancelled flights and this result seems intuitive as these carriers have the highest number of flights. The data shows that JetBlue and AtlanticSoutheast have the highest average of departure and arrival delays while Mesa has the lowest average of delays.</p>
 
 
 
