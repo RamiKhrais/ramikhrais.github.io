@@ -53,14 +53,14 @@
 									<h1>Brief Introduction to Time Series Analysis<br />
 									</h1>
 									<p>In this project, I tried to explain the basics of the time<br />
-                                    series analysis and the technieques used for spotting<br />
+                                    series analysis and the techniques used for spotting<br />
 									their characteristics using the suitable statistical tests.</p>
 								</header>
                                 <div class="image main"><img src="images/pic01.jpg" alt="" /></div>
 
                                 <h2>Time Series: Definition</h2>
 
-                                <p>A sequence of of data points being recorded at specific times.</p>
+                                <p>A sequence of data points being recorded at specific times.</p>
 
                                 <h2>Example of Time Series:</h2>
 
@@ -87,11 +87,11 @@
                                     </p>
                                     <h3>2- Seasonality:</h3>
                                     <p>
-                                    Regular pattern of upward/downward fluctuations that occur within certain period of time due to external factors such as waether, customs, holidays ..etc.
+                                        Regular pattern of upward/downward fluctuations that occur within certain period of time due to external factors such as weather, customs, holidays ..etc.
                                     </p>
                                     <h3>3- Noise:</h3>
                                     <p>
-                                    Unsystemtaic fluctuations that happen due to random variation or unforseen events.
+                                        Unsystematic fluctuations that happen due to random variation or unforeseen events.
                                     </p>
 
                                 <h2>Decomposition of Time Series</h2>
@@ -104,7 +104,7 @@
 
                                 <h3>1- White Noise (WN):</h3>
                                 <p>
-                                    The simplest exapmple of stationary process. It is a purely random process that has constant mean and variace and has zero autocovariance. Each observation in the white noise series is uncorrelated with all other values in the sequence.
+                                    The simplest example of stationary process. It is a purely random process that has constant mean and variance and has zero autocovariance. Each observation in the white noise series is uncorrelated with all other values in the sequence.
                                     </p>
 
                                 <pre><code>WN <- arima.sim(model = list(order = c(0,0,0)), n = 200)
@@ -169,7 +169,7 @@
                                 <h3>6- ARIMA Model:</h3>
 
                                 <p>
-                                    A time series that combines AR modle and MA model after integreating the differences needed for stationarity.
+                                    A time series that combines AR model and MA model after integrating the differences needed for stationarity.
                                     </p>
                                     <p><span class="math display">\[y&#39;_{t} = c + \phi_{1}y&#39;_{t-1} + \cdots + \phi_{p}y&#39;_{t-p}  + \theta_{1}\varepsilon_{t-1} + \cdots + \theta_{q}\varepsilon_{t-q} + \varepsilon_{t}\]</span></p>
                                     <p>where:</p>
@@ -181,7 +181,7 @@
    
                                 <h2>The Modelling of ARMA Models: Box-Jenkins Method</h2>
 
-                                <p>The most popular thechnique in modelling and forecasting time series is Box-Jenkis Method (named after George Box and Gwilym Jenkins who wrote a book on time series analysis in 1976). The method follows three steps:</p>
+                                <p>The most popular technique in modelling and forecasting time series is Box-Jenkis Method (named after George Box and Gwilym Jenkins who wrote a book on time series analysis in 1976). The method follows three steps:</p>
                                 
                                 <p>
                                     <strong>1- Identification:</strong> Assessing whether the time series is stationary, and if not, we should know how many differences are required to make it stationary. Assume that we have a non-stationary process as follows:
@@ -192,7 +192,7 @@
 
                                 <img src="../images/identification.png" alt="">
 
-                                <p>If we want to transform a non-stationary process into a stationary one, we can apply diffrencing on the time series.</p>
+                                <p>If we want to transform a non-stationary process into a stationary one, we can apply differencing on the time series.</p>
 
                                 <pre><code>Stationary <- diff(A)
                                     ts.plot(Stationary)</code></pre>
@@ -216,7 +216,7 @@
 
                                 <p>
                                     <ul>
-                                    <li>If ACF tails off and PACF cuts off at lag p, this should be a strong indictaor of possible AR(p) model.
+                                    <li>If ACF tails off and PACF cuts off at lag p, this should be a strong indicator of possible AR(p) model.
                                     </p></li>
                                     </ul>
 
@@ -227,7 +227,7 @@
 
                                 <p>
                                     <ul>
-                                    <li>If ACF cuts off at laq q and PACF tails off, this should be a strong indictaor of possible MA(q) model.
+                                    <li>If ACF cuts off at laq q and PACF tails off, this should be a strong indicator of possible MA(q) model.
                                     </p></li>
                                     </ul>
 
@@ -269,7 +269,7 @@
                                         <p>1- Residuals should be uncorrelated.</p>
                                         <p>2- Residuals should have zero mean.</p>
                                         <p>3- Residuals should have constant variance.</p>
-                                        <p>4- Residuals should be normally distibuted.</p>
+                                        <p>4- Residuals should be normally distributed.</p>
 
 
 
