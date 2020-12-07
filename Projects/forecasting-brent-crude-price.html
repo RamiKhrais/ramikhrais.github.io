@@ -57,7 +57,7 @@
                                 
                                 <h2>Introduction:</h2>
 
-                                <p>Crude oil is almost the most important commodity in the world. It is widely considered to be the lifeblood of our modern life and the crucial driver behind the radical transformations in the global economy over the last decades. The crude oil and its products are almost used in every single industry ranging from aviation to petrochemical. The world currently produces approximately 93 million barrels per day. The market of crude is bigger than all raw metal markets combined at approximate value of 1.7 trillion dollar a year. Given this exceptional importance, the price of crude oil is one of the key determinant of the global economic activity, the international trade, the stock prices, and the macroeconomic policies adopted by the countries worldwide. It has therefore been a subject of a great deal of research. An enormous number of governmental and international agencies, consultancies, hedge funds and think-tanks are always busy designing and evaluating the best approaches to forecast the crude oil prices and to capture its volatile trends. In this project, I will build an econometric model in order to study the dynamics of monthly Brent oil prices for the period from 1987 to 2018 using the Box-Jenkins Method. I will use several ARIMA models in order to assess their forecasting performances using the relevant statistical tests and techniques. The data for this project is obtained from the Energy Information Administration (EIA) for the spot price of Brent crude in Europe in American Dollar for the mentioned period.</p>
+                                <p>Crude oil is almost the most important commodity in the world. It is widely considered to be the lifeblood of our modern life and the crucial driver behind the radical transformations in the global economy over the last decades. The crude oil and its products are almost used in every single industry ranging from aviation to petrochemical. The world currently produces approximately 93 million barrels per day. The market of crude is bigger than all raw metal markets combined at approximate value of 1.7 trillion dollar a year. Given this exceptional importance, the price of crude oil is one of the key determinants of the global economic activity, the international trade, the stock prices, and the macroeconomic policies adopted by the countries worldwide. It has therefore been a subject of a great deal of research. An enormous number of governmental and international agencies, consultancies, hedge funds and think-tanks are always busy designing and evaluating the best approaches to forecast the crude oil prices and to capture its volatile trends. In this project, I will build an econometric model in order to study the dynamics of monthly Brent oil prices for the period from 1987 to 2018 using the Box-Jenkins Method. I will use several ARIMA models in order to assess their forecasting performances using the relevant statistical tests and techniques. The data for this project is obtained from the Energy Information Administration (EIA) for the spot price of Brent crude in Europe in American Dollar for the mentioned period.</p>
 
                                 <h2>Packages used in Modelling and Forecasting</h2>
 
@@ -87,11 +87,11 @@
                                     ## 5 15/09/1987 18.31
                                     ## 6 15/10/1987 18.76</code></pre>
 
-                                <p>Since we are going to conduct a time series analysis, we need to transform the dataframe into a time series object first.</p>
+                                <p>Since we are going to conduct a time series analysis, we need to transform the data frame into a time series object first.</p>
                                 
                                 <pre><code>brent_ts <- ts(brent[,2], start = c(1987,5), frequency = 12)</code></pre>
 
-                                <p>Let us then plot our series in order to capture its main charachteristics.</p>
+                                <p>Let us then plot our series in order to capture its main characteristics.</p>
 
                                 <pre><code>ts.plot(brent_ts)</code></pre>
 
@@ -107,7 +107,7 @@
 
                                 <img src="../images/series-brent.png" alt="">
 
-                                <p>The series is apparently non-stationary and this is confirmed by the plots of ACf -as if oil price was stationary, the ACF would decay to zero much faster. The ACF plot above suggests a strong persistence across all lags, that is, a small shock at one lag period will influence the the future predictions of the time series for a long time.</p>
+                                <p>The series is apparently non-stationary and this is confirmed by the plots of ACf -as if oil price was stationary, the ACF would decay to zero much faster. The ACF plot above suggests a strong persistence across all lags, that is, a small shock at one lag period will influence the future predictions of the time series for a long time.</p>
 
                                 <p>Though the series looks non-stationary, it might be a good idea to conduct Augmented Dickey-Fuller Test in order to prove our “visual” conclusion.</p>
 
@@ -131,7 +131,7 @@
 
                                 <img src="../images/series-diff-series.png" alt="">
 
-                                <p>We can see from the plot above that the series istelf and ACF look similar to a plot for the white noise process. The ACF drops to zero much faster comparing to the one for non-stationary series. The plot also shows that only two autocorrelations lie outside 95% confidence limits.</p>
+                                <p>We can see from the plot above that the series itself and ACF look similar to a plot for the white noise process. The ACF drops to zero much faster comparing to the one for non-stationary series. The plot also shows that only two autocorrelations lie outside 95% confidence limits.</p>
 
                                 <pre><code>adf.test(diff_series)</code></pre>
 
@@ -323,7 +323,7 @@
 
                                 <h4>3- Residual Analysis:</h4>
 
-                                <p>In addition to the comparison of AICs for our models, we need to make sure that the residuals of each one meet the assumptions of randomness, normal distribution and uncorrelation.</p>
+                                <p>In addition to the comparison of AICs for our models, we need to make sure that the residuals of each one meets the assumptions of randomness, normal distribution and uncorrelation.</p>
 
                                 <pre><code>checkresiduals(Model1)</code></pre>
 
@@ -443,7 +443,7 @@
                                     </table>
                                 </div>            
 
-                                <p>The table above summarizes the values of RMSE for each model. The model ARIMA (1,1,0) has the lowest value of RMSE and thus it outpermfors the other two model in forecasting new data. The RMSE of test set is much higher than RMSE of training set for all models which could be deemed as a sign of overfitting (though the difference is relatively small). We can notice also that althoug the seasonal model ARIMA (1,1,0)(0,0,2) has been the “best” model in fitting data, it failed to outperform ARIMA (1,1,0) when it comes to forecasting.</p>
+                                <p>The table above summarizes the values of RMSE for each model. The model ARIMA (1,1,0) has the lowest value of RMSE and thus it outperforms the other two model in forecasting new data. The RMSE of test set is much higher than RMSE of training set for all models which could be deemed as a sign of overfitting (though the difference is relatively small). We can notice also that although the seasonal model ARIMA (1,1,0)(0,0,2) has been the “best” model in fitting data, it failed to outperform ARIMA (1,1,0) when it comes to forecasting.</p>
 
                                 <pre><code>Forecast <- forecast(Model2, h = 18)
                                     plot(Forecast)
@@ -553,7 +553,7 @@
 
                                     </div>
 
-                                <p>In this porject, the Box-Jenkins Method has been utilized to model the prices of brent crude oil for the period from May-1987 to Nov-2018. Five models have been simulated upon different AR and MA orders and three models of them were selected based on the value of AIC. The three models have then been diagnosed using the residuals analysis. The seasonal model ARIMA (1,1,0)(0,0,2), which was chosen by auto.arima function, proved to be the best-fit model. The three models were used to forecast a new set of data where the model ARIMA (1,1,0) showed the best performance with the lowest value of RMSE. Though our model proved to be little bit accurate in forecasting new data, it cannot be considered as a reliable one under any condition. The forecasting of crude oil prices has always been a hard task. The prices of crude are so sensitive to a wide range of complicated and multi-faceted factors including, among others, the volume of inventories, the weather condition, the speculations and the political tensions. Constructing models that can take into account these factors(though some of them are difficult to be qunatified) might provide much better forecasts than these which depend solely on historical data.</p>
+                                <p>In this project, the Box-Jenkins Method has been utilized to model the prices of brent crude oil for the period from May-1987 to Nov-2018. Five models have been simulated upon different AR and MA orders and three models of them were selected based on the value of AIC. The three models have then been diagnosed using the residuals analysis. The seasonal model ARIMA (1,1,0)(0,0,2), which was chosen by auto.arima function, proved to be the best-fit model. The three models were used to forecast a new set of data where the model ARIMA (1,1,0) showed the best performance with the lowest value of RMSE. Though our model proved to be little bit accurate in forecasting new data, it cannot be considered as a reliable one under any condition. The forecasting of crude oil prices has always been a hard task. The prices of crude are so sensitive to a wide range of complicated and multi-faceted factors including, among others, the volume of inventories, the weather condition, the speculations and the political tensions. Constructing models that can take into account these factors(though some of them are difficult to be quantified) might provide much better forecasts than these which depend solely on historical data.</p>
                                 
 							</section>
 
