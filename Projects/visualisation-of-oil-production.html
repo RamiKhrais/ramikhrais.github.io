@@ -50,13 +50,13 @@
 									</h1>
 									<p>In this project, I used the annual dataset of BP company<br />
                                         in order to create different types of visualisations. I have<br />
-                                        focused on the most common viusalisations used in the industry.</p>
+                                        focused on the most common visualisations used in the industry.</p>
 								</header>
                                 <div class="image main"><img src="images/pic01.jpg" alt="" /></div>
                                 
                                 <h2>Overview</h2>
 
-                                <p>I’m going to visualise some charts for oil production and reserves for few countries. The data used in the coming charts is mainly extracted from BP Statistical Review of World Energy 2018 (Though first two charts were based on OPEC data). When it comes to BP Review, oil production refers to a relateively broad category including crude oil, shale oil, oil sand and natrual gas liquids (NGLs). The aim of this report is to show some of the most popular charts used in the field and some of their customizations.</p>
+                                <p>I’m going to visualise some charts for oil production and reserves for few countries. The data used in the coming charts is mainly extracted from BP Statistical Review of World Energy 2018 (Though first two charts were based on OPEC data). When it comes to BP Review, oil production refers to a relatively broad category including crude oil, shale oil, oil sand and natural gas liquids (NGLs). The aim of this report is to show some of the most popular charts used in the field and some of their customizations.</p>
 
                                 <h2>Packages used in data cleaning and visualisation</h2>
 
@@ -82,7 +82,7 @@
                                     ## 4 Iraq              147  15.1
                                     ## 5 Kuwait            102  10.4</code></pre>
 
-                                <p>As we want the chart to show the production levels in ascending levels, we should manipultae the data a little bit.</p>
+                                <p>As we want the chart to show the production levels in ascending levels, we should manipulate the data a little bit.</p>
 
                                 <pre><code>oil_reserves$Country <- factor(oil_reserves$Country, levels = rev(as.character(oil_reserves$Country)))
 
