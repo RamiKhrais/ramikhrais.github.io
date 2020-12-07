@@ -52,7 +52,7 @@
 									<h1>Linear Regression Analysis: Estimation of the Aggregate Consumption Equation<br />
 									</h1>
 
-									<p>In this project, I have used the linear regression model in order to investigate<br>the realtionship between the disposable income per capita and the agggregate demand<br>in the Palestinian territories.</p>
+									<p>In this project, I have used the linear regression model in order to investigate<br>the relationship between the disposable income per capita and the aggregate demand<br>in the Palestinian territories.</p>
 									
                                 </header>
                                 
@@ -118,13 +118,13 @@
 <p>where:</p>
 <p><span class="math inline">\(\hat{y}\)</span> refers to the mean value of <span class="math inline">\(Y\)</span> for a given value of <span class="math inline">\(X\)</span></p>
 <p style="text-align: justify;">
-<strong>The Least Squares Mehtod</strong> is the statistical approach that can be used to minimize the sum of all the squared distances between the observed <span class="math inline">\(y\)</span> and the predicted <span class="math inline">\(\hat{y}\)</span> at each given value of <span class="math inline">\(x\)</span>
+<strong>The Least Squares Method</strong> is the statistical approach that can be used to minimize the sum of all the squared distances between the observed <span class="math inline">\(y\)</span> and the predicted <span class="math inline">\(\hat{y}\)</span> at each given value of <span class="math inline">\(x\)</span>
 </p>
 
 <img src="../images/linear.png" alt="">
 
 <p style="text-align: justify;">
-	Using the image above, <strong>Least Squares Method</strong> is a mathemtical technique through which we can find the value of <span class="math inline">\({\beta}_0\)</span> (intercept) and <span class="math inline">\({\beta}_1 (slope)\)</span> in order to draw a line that fits the data in a way minimizing the squared distances between the observed <span class="math inline">\(y\)</span> and the predicted <span class="math inline">\(\hat{y}\)</span>, namely the squared distances between the the red points and the blue line (squared errors).
+	Using the image above, <strong>Least Squares Method</strong> is a mathematical technique through which we can find the value of <span class="math inline">\({\beta}_0\)</span> (intercept) and <span class="math inline">\({\beta}_1 (slope)\)</span> in order to draw a line that fits the data in a way minimizing the squared distances between the observed <span class="math inline">\(y\)</span> and the predicted <span class="math inline">\(\hat{y}\)</span>, namely the squared distances between the red points and the blue line (squared errors).
 	</p>
 	<p><span class="math display">\[
 	{\beta}_1 = \frac{\sum_{i = 1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sum_{i = 1}^{n}(x_i - \bar{x})^2}
@@ -135,7 +135,7 @@
 	
 	<h2>Estimating the Consumption Equation</h2>
 	<p>
-	In this post, I will use the simple linear regression to examine whether there is any relationship between the gross national disposable income (GNDI) per capita and the aggregate consumption per capita in the Palestinian Territories. I’m going to use a data extrcted from the Palestinian Central Bureau of Statistics covering the period from 1994 to 2016 using 2004 as a base year. The indepenent variable (predictor) will be the gross national disposable income per capita while the dependent variable (response) will be the the aggregate consumption per capita. The gross national disposable income refers to is the sum of the disposable incomes of all residents, and it measures the income available to the nation for final consumption and gross (or net) saving including the imcomes comes from external sources such as remittances and international aids.
+	In this post, I will use the simple linear regression to examine whether there is any relationship between the gross national disposable income (GNDI) per capita and the aggregate consumption per capita in the Palestinian Territories. I’m going to use a data extracted from the Palestinian Central Bureau of Statistics covering the period from 1994 to 2016 using 2004 as a base year. The independent variable (predictor) will be the gross national disposable income per capita while the dependent variable (response) will be the aggregate consumption per capita. The gross national disposable income refers to is the sum of the disposable incomes of all residents, and it measures the income available to the nation for final consumption and gross (or net) saving including the income comes from external sources such as remittances and international aids.
 	</p>
 	<p>
 	Let us first load the packages needed for analysis.
@@ -194,7 +194,7 @@
 	<img src="../images/linear1.png" alt="">
 
 	<p>
-		The scatter plot above suggests that there is a poisitive linear relationship existed between the two variables; the aggregate consumption per capita tends to increase along with the increase in the gross disposable income per capita.
+		The scatter plot above suggests that there is a positive linear relationship existed between the two variables; the aggregate consumption per capita tends to increase along with the increase in the gross disposable income per capita.
 		</p>
 		<p>
 		If we want to quantify the relationship’s strength between the two variables, we can use the correlation formula:
@@ -263,7 +263,7 @@
 		## 1 (Intercept)         539.      211.         2.56 0.0184   
 		## 2 consumption$GNDIPC    0.656     0.114      5.77 0.0000101</code></pre>
 
-	<p>The table above shows that our intercept estimate is 539, so when gross national income per capita is zero, we can expect aggregate consumption per capita to be 539. The table also shows that the slope estimate is 0.656, which means that for every increase of one dollar in gross national disposable income per capita, we expect the aggregate consumption per capita to increase by $0.656. But are these coefficients statistically significant? We can examine this by computing the standard error at 95% confidence interval for the cofficients.</p>
+	<p>The table above shows that our intercept estimate is 539, so when gross national income per capita is zero, we can expect aggregate consumption per capita to be 539. The table also shows that the slope estimate is 0.656, which means that for every increase of one dollar in gross national disposable income per capita, we expect the aggregate consumption per capita to increase by $0.656. But are these coefficients statistically significant? We can examine this by computing the standard error at 95% confidence interval for the coefficients.</p>
 
 	<pre><code>confint(model)</code></pre>
 
@@ -278,7 +278,7 @@
 	<h2>Assessing the Godness-of-Fit</h2>
 
 	<p>
-		We should ask ouselves now: <strong>How well the model fits our data?</strong>. In order to answer this question, we are going to compute two things:
+		We should ask ourselves now: <strong>How well the model fits our data?</strong>. In order to answer this question, we are going to compute two things:
 		</p>
 		<p>1- Residual Standard Error (RSE).</p>
 		<p>2- R-Squared (<span class="math inline">\(R^2\)</span>).</p>
@@ -294,7 +294,7 @@
 
 	<pre><code>## [1] 112.6039</code></pre>
 
-	<p>RSE value of 112.60 means that the actual aggregate consumption per capita will deviate from the true regression line by approximately $112.60, on average. As RSE is an absolute value that does not explain so much by itself, it might be a good idea to comapre it with the mean of the aggregate consumption per capita.</p>
+	<p>RSE value of 112.60 means that the actual aggregate consumption per capita will deviate from the true regression line by approximately $112.60, on average. As RSE is an absolute value that does not explain so much by itself, it might be a good idea to compare it with the mean of the aggregate consumption per capita.</p>
 
 	<pre><code>sigma(model)/mean(consumption$ConsumptionPC)</code></pre>
 
@@ -303,7 +303,7 @@
 	<p>We got a percentage error of 6.1% when we compare the RSE to the mean of the response variable. This percentage suggests that our model fits the data well as the deviation of the response variable from the regression line is not so big.</p>
 
 	<p>
-		<strong>R-Squared (<span class="math inline">\(R^2\)</span>)</strong>: expresses the proportion of the variance in the depdendent variable (response ) that is “explained” by the model. That is, the variation in aggregate consumption per capita due to the changes in the gross national disposable income per capita. In order to fully understand the logic behind <span class="math inline">\(R^2\)</span>, let us first introduce three important formulas.
+		<strong>R-Squared (<span class="math inline">\(R^2\)</span>)</strong>: expresses the proportion of the variance in the dependent variable (response) that is “explained” by the model. That is, the variation in aggregate consumption per capita due to the changes in the gross national disposable income per capita. In order to fully understand the logic behind <span class="math inline">\(R^2\)</span>, let us first introduce three important formulas.
 		</p>
 		<p>
 		<strong>1- Sum of Squares Total</strong>: refers to the <strong>total</strong> variation of the observed values of <span class="math inline">\(y\)</span>
@@ -334,13 +334,13 @@
 		<strong>Residuals Vs. Fitted Values</strong>: This plot shows if the residuals have a non-linear pattern. If the residuals spread around the horizontal lines without showing specific patter, this can be deemed as a sign of the model’s linearity.
 		</p>
 		<p>
-		<strong>Normal Q-Q</strong>: This plot is concerned with the normal distribution of the residuals. If the residuals follow a straight line and do not deviate far from the line, this should be a good indication that the residulas are normally distributed.
+		<strong>Normal Q-Q</strong>: This plot is concerned with the normal distribution of the residuals. If the residuals follow a straight line and do not deviate far from the line, this should be a good indication that the residuals are normally distributed.
 		</p>
 		<p>
-		<strong>Scale-Location</strong>: This plot shows if the residuals are spread equally along with the fitted values. This plot enables us to make sure that the assumption of homoscedasticity (equall variance of residuals). If the residuals are randomly spread, this should be a good sign that the residuals have the same variance for all values of the predictor variable.
+		<strong>Scale-Location</strong>: This plot shows if the residuals are spread equally along with the fitted values. This plot enables us to make sure that the assumption of homoscedasticity (equal variance of residuals). If the residuals are randomly spread, this should be a good sign that the residuals have the same variance for all values of the predictor variable.
 		</p>
 		<p>
-		<strong>Residuals Vs. Leverage</strong>: This plot enables us to detect the influential cases. The data might include extreme values, however; these values can be with no influential impact on our regression line. On the other hand, some values that lay wihtin the range of the data might be very influential. If the cases are outside of the Cook’s distance (namely outside of a dashed line), the cases are influential to the regression results.
+		<strong>Residuals Vs. Leverage</strong>: This plot enables us to detect the influential cases. The data might include extreme values, however; these values can be with no influential impact on our regression line. On the other hand, some values that lay within the range of the data might be very influential. If the cases are outside of the Cook’s distance (namely outside of a dashed line), the cases are influential to the regression results.
 		</p>
 
 	<pre><code>par(mfrow = c(2, 2))
@@ -399,11 +399,11 @@
 		##          19          20          21          22          23 
 		##  163.164406   86.141608  109.546887  140.660964   84.600191</code></pre>
 
-	<p>As we can see, though the obsererved value of response variable at point 15 equals to 1728.48 (which lies within a reasonable range of our data), it’s fitted value equals to 2031.257. That is, 1728.48 (observed) - 2031.257 (fitted) = -302.777345 (residual) whcih looks high comparing to other residuals for other fitted values in our model. This confirms the wisdom that some values that look “reasonable” wihtin the range of the data might be very influential after fitting the model.</p>
+	<p>As we can see, though the observed value of response variable at point 15 equals to 1728.48 (which lies within a reasonable range of our data), it’s fitted value equals to 2031.257. That is, 1728.48 (observed) - 2031.257 (fitted) = -302.777345 (residual) which looks high comparing to other residuals for other fitted values in our model. This confirms the wisdom that some values that look “reasonable” within the range of the data might be very influential after fitting the model.</p>
 
 	<h2>Excluding the Outlier</h2>
 
-	<p>Excluding the outlier from the model might not be the best approach to deal with its impact, however, for the purpose of this project, I’m going to ommit the outlier from the data in order to examine how this step can aggect the model’s quality.</p>
+	<p>Excluding the outlier from the model might not be the best approach to deal with its impact, however, for the purpose of this project, I’m going to omit the outlier from the data in order to examine how this step can improve the quality of the model.</p>
 
 	<p>Let us import our new data without outlier.</p>
 
@@ -418,9 +418,9 @@
 
 	<img src="../images/outlier.png" alt="">
 
-	<p>We can notice that the exclusion of the outlier results in increasing the correlation between the independent and the dependent variables from 0.78 to 0.89. In other words, omiting the impact of the outlier makes the positive relationship between the two variables much stronger.</p>
+	<p>We can notice that the exclusion of the outlier results in increasing the correlation between the independent and the dependent variables from 0.78 to 0.89. In other words, omitting the impact of the outlier makes the positive relationship between the two variables much stronger.</p>
 
-	<p>Let us now build a new model and assess the coefficients and the godness of fit.</p>
+	<p>Let us now build a new model and assess the coefficients and the goodness of fit.</p>
 
 	<pre><code>model2 <- lm(consumption_new$ConsumptionPC ~ consumption_new$GNDIPC)
 		summary(model2)</code></pre>
@@ -459,7 +459,7 @@
 	<pre><code>## [1] 0.04896419</code></pre>
 
 	<p>
-		Omitting the outlier has also resulted in decreasing the Residual Standard Error from 112.60 in the previous model to 85.68 in the current one. <span class="math inline">\(R^2\)</span> has also increased to 0.78, suggesting that the model without outlier has much stronger explantory power.
+		Omitting the outlier has also resulted in decreasing the Residual Standard Error from 112.60 in the previous model to 85.68 in the current one. <span class="math inline">\(R^2\)</span> has also increased to 0.78, suggesting that the model without outlier has much stronger explanatory power.
 	</p>
 
 	<h2>Residual Analysis</h2>
@@ -471,7 +471,7 @@
 
 	<img src="../images/residual-analysis2.png" alt="">
 
-	<p>We can clearly see from the plots above that the exclusion of the outiler has improved the performance of the residuals. The plot of Residuals Vs. Fitted values suggests that the relationship between the dependent variable and the independent variable is linear. The Q-Q plot shows that the residuals are normally distributed with no significant deviations from the line. The plot of scale-location indictaes that the residulas are not spread equally along the range of predictors as they look somewhat heteroscedastic in the midlle and the end of the range. However, it could be quite difficult to confirm such conclusion with samll set of data as the one under consideration</p>
+	<p>We can clearly see from the plots above that the exclusion of the outlier has improved the performance of the residuals. The plot of Residuals Vs. Fitted values suggests that the relationship between the dependent variable and the independent variable is linear. The Q-Q plot shows that the residuals are normally distributed with no significant deviations from the line. The plot of scale-location indicates that the residuals are not spread equally along the range of predictors as they look somewhat heteroscedastic in the middle and the end of the range. However, it could be quite difficult to confirm such conclusion with small set of data as the one under consideration.</p>
 
 	<h2>Making Predictions</h2>
 
